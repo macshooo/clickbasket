@@ -1,0 +1,18 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|resources|assets|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+
+#RewriteEngine on
+#RewriteBase /
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)$ index.php?/$1 [L]
+
+
+
+php_value date.timezone "Asia/Hong_Kong"
+#php_value date.timezone "America/Chicago"
+#php_value date.timezone "Europe/Berlin"
+#php_value date.timezone "UTC"
