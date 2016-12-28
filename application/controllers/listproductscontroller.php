@@ -1,27 +1,34 @@
 <?php
-    class ListProductsController extends CI_Controller {
-        var $prodlist, $productlist, $cartdata;
+  class ListProductsController extends CI_Controller {
+    function __Construct(){
+      parent::__Construct ();
+        $this->load->database(); // load database
+        $this->load->model('ProductModel'); // load model
+        $this->load->model('MarketModel'); // load model
 
-        function __Construct(){
-            parent::__Construct ();
-            $this->load->database(); // load database
-            $this->load->model('ProductModel'); // load model
+    		if($category = $this->MarketModel->getCategory()){
+    			$this->category = $category;
+    		}
 
-            if($categoryprod = $this->ProductModel->getProducts()){
-                $this->prodlist = $categoryprod;
-
-            }
+        if($categoryprod = $this->ProductModel->getProducts()){
+          $this->prodlist = $categoryprod;
         }
+        $data['categorylist'] = $this->category;
+    		$this->load->view('layouts/header', $data);
+      }
 
-        public function index(){
-            $data['title'] = 'category';
-            $data['prodlist'] = $this->prodlist;
+      public function index(){
+        $data['title'] = 'category';
+        $data['productlist'] = $this->prodlist;
+        $catid = $this->input->get('id');
 
-            $this->load->view('layouts/header');
-            $this->load->view('clickbasket',$data);
-            $this->load->view('navigation/mainfooter');
-            $this->load->view('layouts/footer');
+        if($products = $this->ProductModel->getCategorybyID($catid)){
+          $data['subcategorylist'] = $subcategory;
+          $this->load->view('clickbasket',$data);
+          $this->load->view('navigation/mainfooter');
+          $this->load->view('layouts/footer');
         }
+      }
 
         public function product(){
             $data['title'] = 'product';
@@ -29,7 +36,6 @@
 
             if($prodinfo = $this->ProductModel->getProductbyID($prodid)){
                 $data['product_info'] = $prodinfo;
-                $this->load->view('layouts/header');
                 $this->load->view('clickbasket',$data);
                 $this->load->view('navigation/mainfooter');
                 $this->load->view('layouts/footer');
@@ -44,7 +50,6 @@
 
             $data['cart'] = $globalcart;
 
-            $this->load->view('layouts/header');
             $this->load->view('clickbasket', $data);
             $this->load->view('navigation/mainfooter');
             $this->load->view('layouts/footer');

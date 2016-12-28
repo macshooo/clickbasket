@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+  <head>
     <title>Welcome | ClickBasket</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
@@ -21,39 +21,25 @@
 
     <script src="<?php echo base_url().'assets/js/jquery-3.1.1.js';?>"></script>
     <script src="<?php echo base_url().'assets/js/jquery-3.1.1.min.js';?>"></script>
-    <script src="//netsh.pp.ua/upwork-demo/1/js/typeahead.js"></script>    
+    <script src="//netsh.pp.ua/upwork-demo/1/js/typeahead.js"></script>
 
     <script>
-        $(document).ready(function() {
-
-            $('#searchBar').typeahead({
-                name: 'city',
-                remote: 'city.php?query=%QUERY'
-
-            });
-
-        })
+      $(document).ready(function() {
+        $('#searchBar').typeahead({
+          name: 'city',
+          remote: 'city.php?query=%QUERY'
+        });
+      })
     </script>
-    
-</head>
+  </head>
 
-<body>
-
-
-
-     <!--navbarbeforemobile-hidden-->
-        <?php $this->load->view('navigation/main_nav');?>
-        <!--login-->
-
-        <?php //$this->load->view('navigation/loginmodal');?>
-
-        <!--register-->
-        <?php $this->load->view('navigation/registermodal');?>
-        <!--password recovery-->
-        <?php $this->load->view('navigation/passwordrecovery');?>
-        
-        <!--Main Navbar-->
-        <?php $this->load->view('navigation/secondary_nav');?>
-
-<!--top most navigation -->
-
+  <body>
+    <!--navbarbeforemobile-hidden-->
+    <?php $this->load->view('navigation/main_nav');?>
+    <!--register-->
+    <?php $this->load->view('navigation/registermodal');?>
+    <!--password recovery-->
+    <?php $this->load->view('navigation/passwordrecovery');?>
+    <!--Main Navbar-->
+    <?php $this->load->view('navigation/secondary_nav');?>
+    <!--top most navigation -->

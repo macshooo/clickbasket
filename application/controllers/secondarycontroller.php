@@ -6,18 +6,28 @@
 		public function __construct(){
 			parent::__construct();
 			$this->load->model('CustomerModel');
+			$this->load->model('MarketModel'); // load model
 
 			if($this->session->userdata('logged_in')==TRUE){
 				if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
 					$this->userinfo = $user;
 				}
 	 		}
+
+			if($category = $this->MarketModel->getCategory()){
+					$this->category = $category;
+			}
+			if($subcategory = $this->MarketModel->getSubCategory()){
+				$this->subcategory = $subcategory;
+			}
+			$data['categorylist'] = $this->category;
+			$data['subcategorylist'] = $this->subcategory;
+			$this->load->view('layouts/header', $data);
 		}
 
 		public function index(){
 			$data['title'] = 'login';
 
-			$this->load->view('layouts/header');
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
@@ -31,7 +41,6 @@
 			if($this->form_validation->run() == false){
 				$data['title'] = 'login';
 
-				$this->load->view('layouts/header');
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -47,7 +56,6 @@
 					$this->form_validation->set_message('verifyUser','Incorrect Email Or Password. Please Try Again');
 					$data['title'] = 'login';
 
-					$this->load->view('layouts/header');
 					$this->load->view('clickbasket',$data);
 					$this->load->view('navigation/mainfooter');
 					$this->load->view('layouts/footer');
@@ -63,7 +71,6 @@
 		public function register(){
 			$data['title'] = 'register';
 
-			$this->load->view('layouts/header');
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
@@ -81,7 +88,6 @@
 			if($this->form_validation->run()==false){
 				$data['title'] = 'register';
 
-				$this->load->view('layouts/header');
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -104,7 +110,6 @@
 				);
 				$this->CustomerModel->register_user($data);
 
-				$this->load->view('layouts/header');
 				$this->load->view('main_pages/emailverification');
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -168,7 +173,6 @@
 		$data['title'] = 'profile';
 		$data['userinfo'] = $this->userinfo;
 
-		$this->load->view('layouts/header');
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -178,7 +182,6 @@
 		$data['title'] = 'orderhistory';
 		$data['userinfo'] = $this->userinfo;
 
-		$this->load->view('layouts/header');
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -188,7 +191,6 @@
 		$data['title'] = 'wishlist';
 		$data['userinfo'] = $this->userinfo;
 
-		$this->load->view('layouts/header');
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -198,7 +200,6 @@
 		$data['title'] = 'accountsettings';
 		$data['userinfo'] = $this->userinfo;
 
-		$this->load->view('layouts/header');
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -208,7 +209,11 @@
 		$data['title'] = 'selectmarket';
 		$data['userinfo'] = $this->userinfo;
 
-		$this->load->view('layouts/header');
+		if($market = $this->MarketModel->getMarket()){
+			$this->market = $market;
+			$data['marketlist'] = $this->market;
+		}
+
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
