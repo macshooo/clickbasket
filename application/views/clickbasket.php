@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 if($title == 'home')
 {
-	$this->load->view('main_pages/home');	
+	$this->load->view('main_pages/home');
 }
 
 if($title == 'aboutus')
@@ -20,9 +20,9 @@ if($title =='contactus')
 	$this->load->view('main_pages/contactus');
 }
 
-if($title =='category')
+if($title =='productlist')
 {
-	$this->load->view('main_pages/category');
+	$this->load->view('main_pages/productlist');
 }
 
 if($title =='product')

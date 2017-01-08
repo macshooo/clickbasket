@@ -14,14 +14,14 @@
 				}
 	 		}
 
-			if($category = $this->MarketModel->getCategory()){
-					$this->category = $category;
-			}
-			if($subcategory = $this->MarketModel->getSubCategory()){
-				$this->subcategory = $subcategory;
-			}
-			$data['categorylist'] = $this->category;
-			$data['subcategorylist'] = $this->subcategory;
+			// if($category = $this->MarketModel->getCategory()){
+			// 		$this->category = $category;
+			// }
+			// if($subcategory = $this->MarketModel->getSubCategory()){
+			// 	$this->subcategory = $subcategory;
+			// }
+			// $data['categorylist'] = $this->category;
+			// $data['subcategorylist'] = $this->subcategory;
 			$this->load->view('layouts/header', $data);
 		}
 

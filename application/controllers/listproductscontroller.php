@@ -1,93 +1,103 @@
 <?php
   class ListProductsController extends CI_Controller {
-    function __Construct(){
-      parent::__Construct ();
-        $this->load->database(); // load database
-        $this->load->model('ProductModel'); // load model
-        $this->load->model('MarketModel'); // load model
+    public function __construct(){
+      parent::__construct();
+      $this->load->database(); // load database
+      $this->load->model('ProductModel'); // load model
+      $this->load->model('MarketModel'); // load model
+    }
 
-    		if($category = $this->MarketModel->getCategory()){
-    			$this->category = $category;
-    		}
+    public function checkMarketSession(){
+			$market = $this->session->userdata('market');
 
-        if($categoryprod = $this->ProductModel->getProducts()){
-          $this->prodlist = $categoryprod;
-        }
-        $data['categorylist'] = $this->category;
+			if(!empty($market)){
+				$marketcategory = $this->MarketModel->getCategory($market);
+				$marketsubcategory = $this->MarketModel->getSubCategory();
+
+				$data['marketcat'] = $marketcategory;
+				$data['marketsubcat'] = $marketsubcategory;
+
     		$this->load->view('layouts/header', $data);
+			}else{
+				redirect('secondarycontroller/selectmarket');
+			}
+		}
+
+    public function index(){
+      $data['title'] = 'productlist';
+      $subcatid = $this->input->get('id');
+
+      $this->checkMarketSession();
+      $products = $this->ProductModel->getProductsbySubcategory($subcatid);
+      $data['listproducts'] = $products;
+
+      $this->load->view('clickbasket',$data);
+      $this->load->view('navigation/mainfooter');
+      $this->load->view('layouts/footer');
+    }
+
+    public function product(){
+      $data['title'] = 'product';
+      $prodid = $this->input->get('id');
+
+      $this->checkMarketSession();
+      if($prodinfo = $this->ProductModel->getStoreprodByID($prodid)){
+        $data['product_info'] = $prodinfo;
+
+        $this->load->view('clickbasket',$data);
+        $this->load->view('navigation/mainfooter');
+        $this->load->view('layouts/footer');
+      }
+    }
+
+    public function shoppingcart(){
+      $data['title'] = 'shoppingcart';
+
+      $cartsession = $this->session->userdata('cartsession');
+      $globalcart = $this->session->userdata('globalcart');
+
+      $data['cart'] = $globalcart;
+
+      $this->load->view('clickbasket', $data);
+      $this->load->view('navigation/mainfooter');
+      $this->load->view('layouts/footer');
+    }
+
+    public function input_cart(){
+      $prodid = $this->input->post('productid');
+      $qty = $this->input->post('qty');
+
+      if (count($cartsession = $this->session->userdata('cartsession')) == 0){
+        $cartsession[] = array('id'=>$prodid,'qty'=>$qty);
+      }else if(!in_array($prodid,$cartsession)){
+        array_push($cartsession,array('id'=>$prodid,'qty'=>$qty));
+      }else{
+        array_push($cartsession,array('id'=>$prodid,'qty'=>$qty));
       }
 
-      public function index(){
-        $data['title'] = 'category';
-        $data['productlist'] = $this->prodlist;
-        $catid = $this->input->get('id');
+      $this->session->set_userdata('cartsession',$cartsession);
 
-        if($products = $this->ProductModel->getCategorybyID($catid)){
-          $data['subcategorylist'] = $subcategory;
-          $this->load->view('clickbasket',$data);
-          $this->load->view('navigation/mainfooter');
-          $this->load->view('layouts/footer');
+      if($cartsession!=null){
+        $merged = array();
+
+        foreach ($cartsession as $row) {
+          if (isset($merged[$row['id']])) {
+            $merged[$row['id']]['qty'] += $row['qty'];
+          }else {
+            $merged[$row['id']] = $row;
+          }
         }
+
+        $cartsession = $merged;
+        $this->session->set_userdata('cartsession',$cartsession);
       }
 
-        public function product(){
-            $data['title'] = 'product';
-            $prodid = $this->input->get('id');
-
-            if($prodinfo = $this->ProductModel->getProductbyID($prodid)){
-                $data['product_info'] = $prodinfo;
-                $this->load->view('clickbasket',$data);
-                $this->load->view('navigation/mainfooter');
-                $this->load->view('layouts/footer');
-            }
+      if($this->session->userdata('cartsession')!=NULL){
+        if($this->cartdata = $this->ProductModel->getProductToCart($this->session->userdata('cartsession'))){
+          $this->session->set_userdata('globalcart', $this->cartdata);
         }
-
-        public function shoppingcart(){
-            $data['title'] = 'shoppingcart';
-
-            $cartsession = $this->session->userdata('cartsession');
-            $globalcart = $this->session->userdata('globalcart');
-
-            $data['cart'] = $globalcart;
-
-            $this->load->view('clickbasket', $data);
-            $this->load->view('navigation/mainfooter');
-            $this->load->view('layouts/footer');
-        }
-
-        public function input_cart(){
-            $prodid = $this->input->post('productid');
-            $qty = $this->input->post('qty');
-
-            if (count($cartsession = $this->session->userdata('cartsession')) == 0){
-                $cartsession[] = array('id'=>$prodid,'qty'=>$qty);
-            }else if(!in_array($prodid,$cartsession)){
-                array_push($cartsession,array('id'=>$prodid,'qty'=>$qty));
-            }else{
-                array_push($cartsession,array('id'=>$prodid,'qty'=>$qty));
-            }
-
-            $this->session->set_userdata('cartsession',$cartsession);
-
-            if($cartsession!=null){
-                $merged = array();
-                foreach ($cartsession as $row) {
-                    if (isset($merged[$row['id']])) {
-                        $merged[$row['id']]['qty'] += $row['qty'];
-                    } else {
-                        $merged[$row['id']] = $row;
-                    }
-                }
-                $cartsession = $merged;
-                $this->session->set_userdata('cartsession',$cartsession);
-            }
-
-            if($this->session->userdata('cartsession')!=NULL){
-                if($this->cartdata = $this->ProductModel->getProductToCart($this->session->userdata('cartsession'))){
-                    $this->session->set_userdata('globalcart', $this->cartdata);
-                }
-            }
-        }
+      }
+    }
 
         public function editcart_item(){
             $id = $this->input->post('productid');

@@ -1,38 +1,41 @@
 <?php
-	//top most navigation
 	class MainController extends CI_Controller {
 		public function __construct(){
 			parent::__construct();
 			$this->load->database(); // load database
 			$this->load->model('MarketModel'); // load model
+		}
 
-			if($category = $this->MarketModel->getCategory()){
-					$this->category = $category;
+		public function getMarket(){
+			$marketid = $this->input->get('id');
+			$this->session->set_userdata('market',$marketid);
+
+			$this->index();
+		}
+
+		public function checkMarketSession(){
+			$market = $this->session->userdata('market');
+
+			if(!empty($market)){
+				$marketcategory = $this->MarketModel->getCategory($market);
+				$marketsubcategory = $this->MarketModel->getSubCategory();
+
+				$data['marketcat'] = $marketcategory;
+				$data['marketsubcat'] = $marketsubcategory;
+
+    		$this->load->view('layouts/header', $data);
+			}else{
+				redirect('secondarycontroller/selectmarket');
 			}
-			if($subcategory = $this->MarketModel->getSubCategory()){
-				$this->subcategory = $subcategory;
-			}
-			$data['categorylist'] = $this->category;
-			$data['subcategorylist'] = $this->subcategory;
-			//$this->load->view('layouts/header', $data);
 		}
 
 		public function index(){
 			$data['title'] = 'home';
 
-			$marketid = $this->input->get('id');
-
-			if(!empty($marketid)){
-				$marketinfo = $this->MarketModel->getInfobyID($marketid);
-
-				$data['marketinfolist'] = $marketinfo;
-    		$this->load->view('layouts/header', $data);
-    		$this->load->view('clickbasket',$data);
-    		$this->load->view('navigation/mainfooter');
-    		$this->load->view('layouts/footer');
-			}else{
-				redirect('secondarycontroller/selectmarket');
-			}
+			$this->checkMarketSession();
+			$this->load->view('clickbasket',$data);
+    	$this->load->view('navigation/mainfooter');
+    	$this->load->view('layouts/footer');
 		}
 
 		public function aboutus(){

@@ -5,12 +5,9 @@
         <div class="page-header-banner-inner">
           <h1 class="page-title">Running Shoes</h1>
             <ol class="breadcrumb page-breadcrumb">
-              <li><a href="#">Home</a>
-              </li>
-              <li><a href="#">Clothes &amp; Shoes</a>
-              </li>
-              <li><a href="#">Woman</a>
-              </li>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Clothes &amp; Shoes</a></li>
+              <li><a href="#">Woman</a></li>
               <li class="active">Running Shoes</li>
             </ol>
             <ul class="category-selections clearfix">
@@ -208,32 +205,26 @@
                       </aside>
                     </div>
                     <div class="col-md-9">
-                        <div class="row" data-gutter="15">
-                          <?php $this->load->view('navigation/productblock');?>
+                      <div class="row" data-gutter="15">
+                        <?php $this->load->view('navigation/productblock');?>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="category-pagination-sign">58 items found in Cell Phones. Showing 1 - 12</p>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="category-pagination-sign">58 items found in Cell Phones. Showing 1 - 12</p>
-                            </div>
-                            <div class="col-md-6">
-                                <nav>
-                                    <ul class="pagination category-pagination pull-right">
-                                        <li class="active"><a href="#">1</a>
-                                        </li>
-                                        <li><a href="#">2</a>
-                                        </li>
-                                        <li><a href="#">3</a>
-                                        </li>
-                                        <li><a href="#">4</a>
-                                        </li>
-                                        <li><a href="#">5</a>
-                                        </li>
-                                        <li class="last"><a href="#"><i class="fa fa-long-arrow-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                        <div class="col-md-6">
+                          <nav>
+                            <ul class="pagination category-pagination pull-right">
+                              <li class="active"><a href="#">1</a></li>
+                              <li><a href="#">2</a></li>
+                              <li><a href="#">3</a></li>
+                              <li><a href="#">4</a></li>
+                              <li><a href="#">5</a></li>
+                              <li class="last"><a href="#"><i class="fa fa-long-arrow-right"></i></a></li>
+                            </ul>
+                          </nav>
                         </div>
+                      </div>
                     </div>
                 </div>
             </div>
