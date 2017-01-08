@@ -21,8 +21,8 @@
                ->join('store', 'store_category.store_id = store.store_id')
                ->join('category', 'store_category.category_id = category.category_id')
                ->where('store.store_id', $marketid);
-      $getCategoryquery = $this->db->get();
-      $result = $getCategoryquery->result();
+      $query = $this->db->get();
+      $result = $query->result();
 
       return $result;
     }
@@ -30,8 +30,8 @@
     public function getSubCategory(){
       $this->db->select('*');
       $this->db->from('subcategory');
-      $getSubCategoryquery = $this->db->get();
-      $result = $$getSubCategoryquery->result();
+      $query = $this->db->get();
+      $result = $query->result();
 
       return $result;
     }

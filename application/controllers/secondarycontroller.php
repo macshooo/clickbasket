@@ -13,21 +13,28 @@
 					$this->userinfo = $user;
 				}
 	 		}
+		}
 
-			// if($category = $this->MarketModel->getCategory()){
-			// 		$this->category = $category;
-			// }
-			// if($subcategory = $this->MarketModel->getSubCategory()){
-			// 	$this->subcategory = $subcategory;
-			// }
-			// $data['categorylist'] = $this->category;
-			// $data['subcategorylist'] = $this->subcategory;
-			$this->load->view('layouts/header', $data);
+		public function checkMarketSession(){
+			$market = $this->session->userdata('market');
+
+			if(!empty($market)){
+				$marketcategory = $this->MarketModel->getCategory($market);
+				$marketsubcategory = $this->MarketModel->getSubCategory();
+
+				$data['marketcat'] = $marketcategory;
+				$data['marketsubcat'] = $marketsubcategory;
+
+    		$this->load->view('layouts/header', $data);
+			}else{
+				redirect('secondarycontroller/selectmarket');
+			}
 		}
 
 		public function index(){
 			$data['title'] = 'login';
 
+			$this->checkMarketSession();
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
@@ -71,6 +78,7 @@
 		public function register(){
 			$data['title'] = 'register';
 
+			$this->checkMarketSession();
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
@@ -173,6 +181,7 @@
 		$data['title'] = 'profile';
 		$data['userinfo'] = $this->userinfo;
 
+		$this->checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -182,6 +191,7 @@
 		$data['title'] = 'orderhistory';
 		$data['userinfo'] = $this->userinfo;
 
+		$this->checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -191,6 +201,7 @@
 		$data['title'] = 'wishlist';
 		$data['userinfo'] = $this->userinfo;
 
+		$this->checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -200,6 +211,7 @@
 		$data['title'] = 'accountsettings';
 		$data['userinfo'] = $this->userinfo;
 
+		$this->checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -214,6 +226,7 @@
 			$data['marketlist'] = $this->market;
 		}
 
+		$this->checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
