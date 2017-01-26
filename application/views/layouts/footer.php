@@ -14,287 +14,218 @@
 </html>
 
 <script type="text/javascript">
-$("#cfname").click(function(){
-   $("#delbutt").show();
-   $("#donebutt").show();
-   $("#fni").show();
-   $("#cfname").hide();
-   $("#fnp").hide();
-});
-$("#delbutt").click(function(){
-   $("#delbutt").hide();
-   $("#donebutt").hide();
-   $("#fni").hide();
-   $("#cfname").show();
-   $("#fnp").show();
-});
-$("#clname").click(function(){
-   $("#delbutt1").show();
-   $("#donebutt1").show();
-   $("#lni").show();
-   $("#clname").hide();
-   $("#lnp").hide();
-});
-$("#delbutt1").click(function(){
-   $("#delbutt1").hide();
-   $("#donebutt1").hide();
-   $("#lni").hide();
-   $("#clname").show();
-   $("#lnp").show();
-});
-$("#cgd").click(function(){
-   $("#delbutt2").show();
-   $("#donebutt2").show();
-   $("#gdi").show();
-   $("#cgd").hide();
-   $("#gdp").hide();
-});
-$("#delbutt2").click(function(){
-   $("#delbutt2").hide();
-   $("#donebutt2").hide();
-   $("#gdi").hide();
-   $("#cgd").show();
-   $("#gdp").show();
-});
-$("#cbd").click(function(){
-   $("#delbutt3").show();
-   $("#donebutt3").show();
-   $("#bdi").show();
-   $("#cbd").hide();
-   $("#bdp").hide();
-});
-$("#delbutt3").click(function(){
-   $("#delbutt3").hide();
-   $("#donebutt3").hide();
-   $("#bdi").hide();
-   $("#cbd").show();
-   $("#bdp").show();
-});
-$("#cem").click(function(){
-   $("#delbutt4").show();
-   $("#donebutt4").show();
-   $("#emi").show();
-   $("#cem").hide();
-   $("#emp").hide();
-});
-$("#delbutt4").click(function(){
-   $("#delbutt4").hide();
-   $("#donebutt4").hide();
-   $("#emi").hide();
-   $('#emailerror').html('<br>');
-   $("#cem").show();
-   $("#emp").show();
-});
-$("#cad").click(function(){
-   $("#delbutt5").show();
-   $("#donebutt5").show();
-   $("#adi").show();
-   $("#cad").hide();
-   $("#adp").hide();
-});
-$("#delbutt5").click(function(){
-   $("#delbutt5").hide();
-   $("#donebutt5").hide();
-   $("#adi").hide();
-   $("#cad").show();
-   $("#adp").show();
-});
-$("#ccn").click(function(){
-   $("#delbutt6").show();
-   $("#donebutt6").show();
-   $("#cni").show();
-   $("#ccn").hide();
-   $("#cnp").hide();
-});
-$("#delbutt6").click(function(){
-   $("#delbutt6").hide();
-   $("#donebutt6").hide();
-   $("#cni").hide();
-   $("#ccn").show();
-   $("#cnp").show();
-});
-$("#cpw").click(function(){
-   $("#delbutt8").show();
-   $("#donebutt8").show();
-   $("#pwni").show();
-   $("#cpw").hide();
-   $("#pwnp").hide();
-});
-$("#delbutt8").click(function(){
-   $("#delbutt8").hide();
-   $("#donebutt8").hide();
-   $("#pwni").hide();
-   $("#cpw").show();
-   $("#pwnp").show();
-});
+  function editThis(id){
+    $("#cancelbutt_"+id).show();
+    $("#donebutt_"+id).show();
+    $("#input_"+id).show();
+    $("#edit_"+id).hide();
+    $("#text_"+id).hide();
+  }
 
-  $('#donebutt').click(function(){
-    var firstname = $('#fni').val();
+  function cancelEdit(id){
+    $("#cancelbutt_"+id).hide();
+    $("#donebutt_"+id).hide();
+    $("#input_"+id).hide();
+    $("#edit_"+id).show();
+    $("#text_"+id).show();
+  }
 
-    $.ajax({
-           type: "POST",
-           data: {firstnamepost:firstname},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt").hide();
-              $("#donebutt").hide();
-              $("#fni").hide();
-              $("#cfname").show();
-              $("#fnp").html(firstname);
-              $("#fnp").show();
-              },
-           error: function(){
-              }
-          });
-   });
+  //FIRSTNAME START
+  $('#donebutt_1').click(function(){
+    var firstname = $('#input_1').val();
+    if(!firstname){
+      $("#error_1").html('Please input your firstname');
+      setTimeout(function() {
+        $('#error_1').html('  ');
+      },4000);
+    }else{
+      $.ajax({
+         type: "POST",
+         data: {firstnamepost:firstname},
+         url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+         success: function(data){
+          $("#cancelbutt_1").hide();
+          $("#donebutt_1").hide();
+          $("#input_1").hide();
+          $("#edit_1").show();
+          $("#text_1").html(firstname);
+          $("#text_1").show();
+        },
+        error: function(){
+        }
+    });
+    }
+  });
+  //FIRSTNAME END
 
-  $('#donebutt1').click(function(){
-    var lastname = $('#lni').val();
+  //LASTNAME START
+  $('#donebutt_2').click(function(){
+  var lastname = $('#input_2').val();
+  if(!lastname){
+  $("#error_2").html('Please input your lastname');
+  setTimeout(function() {
+            $('#error_2').html('  ');
+              },4000);
+  }
+  else{
+  $.ajax({
+     type: "POST",
+     data: {lastnamepost:lastname},
+     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+     success: function(data){
+        $("#cancelbutt_2").hide();
+        $("#donebutt_2").hide();
+        $("#input_2").hide();
+        $("#edit_2").show();
+        $("#text_2").html(lastname);
+        $("#text_2").show();
+        },
+     error: function(){
+        }
+    });
+  }
+  });
+  //LASTNAME END
 
-    $.ajax({
-           type: "POST",
-           data: {lastnamepost:lastname},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt1").hide();
-              $("#donebutt1").hide();
-              $("#lni").hide();
-              $("#clname").show();
-              $("#lnp").html(lastname);
-              $("#lnp").show();
-              },
-           error: function(){
-              }
-          });
-   });
+  //EMAIL START
+  $('#donebutt_3').click(function(){
+  var email = $('#input_3').val();
+  var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
 
-  $('#donebutt2').click(function(){
-    var gender = $('input[name=gender]:checked').val();
+  if(!email){
+    $("#error_3").html('Please input your email');
+    setTimeout(function() {
+              $('#error_3').html(' ');
+                },4000);
+  }else if(!testEmail.test(email)){
+    $("#error_3").html('Email is invalid');
+    setTimeout(function() {
+              $('#error_3').html(' ');
+                },4000);
+  }else{
+  $.ajax({
+     type: "POST",
+     data: {emailpost:email},
+     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+     success: function(data){
+      if(data == 'existfalse'){
+          $('#error_3').html('This email already exist!');
+          setTimeout(function() {
+            $('#error_3').html('  ');
+              },4000);
+        }
+          else{
+        $("#cancelbutt_3").hide();
+        $("#donebutt_3").hide();
+        $("#input_3").hide();
+        $("#edit_3").show();
+        $("#text_3").html(email);
+        $("#text_3").show();
+      }
+        },
+     error: function(){
+        }
+    });
+  }
+  });
+  //EMAIL END
 
-    $.ajax({
-           type: "POST",
-           data: {genderpost:gender},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt2").hide();
-              $("#donebutt2").hide();
-              $("#gdi").hide();
-              $("#cgd").show();
-              $("#gdp").html(gender);
-              $("#gdp").show();
-              },
-           error: function(){
-              }
-          });
-   });
+  //ADDRESS START
+  $('#donebutt_4').click(function(){
+  var address = $('#input_4').val();
 
-  $('#donebutt3').click(function(){
-    var birthday = $('#bdi').val();
+  if(!address){
+  $("#error_4").html('Please input your address');
+  setTimeout(function() {
+            $('#error_4').html('  ');
+              },4000);
+  }
+  else{
+  $.ajax({
+     type: "POST",
+     data: {addresspost:address},
+     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+     success: function(data){
+        $("#cancelbutt_4").hide();
+        $("#donebutt_4").hide();
+        $("#input_4").hide();
+        $("#edit_4").show();
+        $("#text_4").html(address);
+        $("#text_4").show();
+        },
+     error: function(){
+        }
+    });
+  }
+  });
+  //ADDRESS END
 
-    $.ajax({
-           type: "POST",
-           data: {birthdaypost:birthday},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#donebutt3").hide();
-              $("#delbutt3").hide();
-              $("#bdi").hide();
-              $("#cbd").show();
-              $("#bdp").html(birthday);
-              $("#bdp").show();
-              },
-           error: function(data){
-              console.log(data);
-              }
-          });
-   });
+  //MOBILE NUMBER START
+  $("#cancelbutt_5").click(function(){
+  $("#cancelbutt_5").hide();
+  $("#donebutt_5").hide();
+  $("#input_5").hide();
+  $("#edit_5").show();
+  $("#text_5").show();
+  });
 
-  $('#donebutt4').click(function(){
-    var email = $('#emi').val();
+  $('#donebutt_5').click(function(){
+  var mobilenumber = $('#input_5').val();
 
-    $.ajax({
-           type: "POST",
-           data: {emailpost:email},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              if(data == 'existfalse'){
-                $('#emailerror').html('This email already exist!');
-                setTimeout(function() {
-                  $('#emailerror').html('  ');
-                    },4000);
-              }else{
-                $("#delbutt4").hide();
-                $("#donebutt4").hide();
-                $("#emi").hide();
-                $("#cem").show();
-                $("#emp").html(email);
-                $("#emp").show();
-              }
-              },
-           error: function(data){
-            }
-          });
-   });
+  if(!mobilenumber){
+  $("#error_5").html('Please input your mobilenumber');
+  setTimeout(function() {
+            $('#error_5').html('  ');
+              },4000);
+  }
+  else{
+  $.ajax({
+     type: "POST",
+     data: {mobilenumberpost:mobilenumber},
+     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+     success: function(data){
+        $("#cancelbutt_5").hide();
+        $("#donebutt_5").hide();
+        $("#input_5").hide();
+        $("#edit_5").show();
+        $("#text_5").html(mobilenumber);
+        $("#text_5").show();
+        },
+     error: function(){
+        }
+    });
+  }
+  });
+  //MOBILE NUMBER END
 
-  $('#donebutt5').click(function(){
-    var address = $('#adi').val();
+  //PASSWORD START
+  $('#donebutt_6').click(function(){
+  var password = $('#input_6').val();
 
-    $.ajax({
-           type: "POST",
-           data: {addresspost:address},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt5").hide();
-              $("#donebutt5").hide();
-              $("#adi").hide();
-              $("#cad").show();
-              $("#adp").html(address);
-              $("#adp").show();
-              },
-           error: function(){
-
-              }
-          });
-   });
-
-  $('#donebutt6').click(function(){
-    var  mobilenumber = $('#cni').val();
-
-    $.ajax({
-           type: "POST",
-           data: {mobilenumberpost:mobilenumber},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt6").hide();
-              $("#donebutt6").hide();
-              $("#cni").hide();
-              $("#ccn").show();
-              $("#cnp").html(mobilenumber);
-              $("#cnp").show();
-              },
-           error: function(){
-              }
-          });
-   });
-
-  $('#donebutt8').click(function(){
-    var  password = $('#pwni').val();
-
-    $.ajax({
-           type: "POST",
-           data: {passwordpost:password},
-           url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-           success: function(data){
-              $("#delbutt8").hide();
-              $("#donebutt8").hide();
-              $("#pwni").hide();
-              $("#cpw").show();
-              $("#pwnp").show();
-              },
-           error: function(){
-              }
-          });
-   });
+  if(!password){
+  $("#error_6").html('Please input your password');
+  setTimeout(function() {
+            $('#error_6').html('  ');
+              },4000);
+  }
+  else{
+  $.ajax({
+     type: "POST",
+     data: {passwordpost:password},
+     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+     success: function(data){
+        $("#cancelbutt_6").hide();
+        $("#donebutt_6").hide();
+        $("#input_6").hide();
+        $("#edit_6").show();
+        $("#text_6").html();
+        $("#text_6").show();
+        },
+     error: function(){
+        }
+    });
+  }
+  });
 
 	$(document).ready(function(){
 		$("#addtocart").click(function(){
@@ -323,29 +254,24 @@ $("#delbutt8").click(function(){
 		});
 
 		$('.btn-minus').click(function(){
-			var productid = $(".table-shopping-qty").attr("id");
-
-			dataString = {productid: productid};
-
-			$.ajax({
-				type: "POST",
-				url: "<?php echo base_url(); ?>"+"listproductscontroller/editcart_item",
-				data: dataString,
-				cache: false,
-				success: function(prod){
-					alert(prod);
-					$(".table-shopping-qty").val(parseInt($(".table-shopping-qty").val()) - 1);
-					// $("#total").text()
-				}, error: function(){
-					swal('Oops!', 'Something went wrong. Please try again later', 'error');
-				}
-			});
-
+			$(this).parent().siblings('input').val(parseInt($(this).parent().siblings('input').val()) - 1);
 		});
 
 		$('.btn-plus').click(function(){
 			$(this).parent().siblings('input').val(parseInt($(this).parent().siblings('input').val()) + 1);
 		})
+
+    $('#placeorder').click(function(){
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url();?>"+"listproductscontroller/placeOrder",
+        success: function(){
+          swal('Success!', 'The order has successfully been processed!', 'success');
+        }, error: function(){
+          swal('Oops!', 'Something went wrong. Please try again later', 'error');
+        }
+      })
+    });
 	});
 
   function emailverification(){
@@ -356,6 +282,23 @@ $("#delbutt8").click(function(){
   function changeemail(){
     document.getElementById("emailverificationpanel").style.display="none";
     document.getElementById("changeemailpanel").style.display="block";
+  }
+
+  function updateShoppingCart(btndata){
+    var productid = $(".table-shopping-qty").attr("id");
+    dataString = {productid: productid, data:btndata};
+
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('listproductscontroller/editcart_item');?>",
+      data: dataString,
+      cache: false,
+      success: function(newtotal){
+        $('#productTotal').html(newtotal);
+      }, error: function(){
+        swal('Oops!', 'Something went wrong. Please try again later', 'error');
+      }
+    });
   }
 
 	function removeItem(id){
@@ -389,4 +332,22 @@ $("#delbutt8").click(function(){
 			});
 		});
 	}
+
+  function viewProducts(id){
+    $('#orderProductsModal').modal('show');
+    $('#orderProductsBody').empty();
+    $('#orderProductsBody').html('Loading...');
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url("secondarycontroller/getProductsByID") ?>',
+      data: {id:id},
+      dataType: 'JSON',
+      success: function(data) {
+        $('#orderProductsBody').empty();
+        for(var i=0; i < data.length; i++){
+          $('#orderProductsBody').append('<tr> <td></td> <td>'+data[i].prod_name+'</td> <td>'+data[i].order_qty+'</td> <td>'+data[i].storeprod_price+'</td> <td></td> </tr>');
+        }
+      }
+    });
+  }
 </script>

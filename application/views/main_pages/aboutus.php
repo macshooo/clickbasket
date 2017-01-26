@@ -15,7 +15,7 @@
             <!--AMELITO'S PROFILE-->
                 <div class="row">
                     <div class="col-md-8">
-                      <header class="page-header">   
+                      <header class="page-header">
                       </header>
                         <div class="box-lg">
                             <h5>Personal Information</h5>
@@ -24,39 +24,39 @@
                               <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Email:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">AmelitoAlcuitas@gmail.com</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">amelitoalcuitasjr@gmail.com</p>
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Age:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">20</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Birthday:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">April-29-1996</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">April 29, 1996</p>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Home Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                   <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Mobile Number:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
-                                </div>  
+                                    </div>
+                                </div>
                                 <hr>
                                 <h5>Educational Background</h5>
                                 <hr>
@@ -64,30 +64,30 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Elementary:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">HighSchool:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">College:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Univeristy Of San Carlos</p>
-                                    </div>  
+                                    </div>
                                 </div>
                              </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                    <header class="page-header">   
+                    <header class="page-header">
                     </header>
                         <div class="box-lg">
                             <h5>Amelito Alcuitas | Head Programmer</h5>
                                 <hr />
-                                <img src="<?php echo base_url().'assets/img/people/amelito.jpg';?>" style="width: 100%;"> 
+                                <img src="<?php echo base_url().'assets/img/people/amelito.jpg';?>" style="width: 100%;">
                                 <ul class="main-footer-social-list">
                                     <li>
                                         <a class="fa fa-facebook" href="#"></a>
@@ -107,7 +107,7 @@
                 <!--MACMAC'S PROFILE-->
                   <div class="row">
                     <div class="col-md-8">
-                      <header class="page-header">   
+                      <header class="page-header">
                       </header>
                         <div class="box-lg">
                             <h5>Personal Information</h5>
@@ -116,39 +116,39 @@
                               <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Email:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">LuisMarcelTan@gmail.com</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">tan.louismarcel@gmail.com</p>
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Age:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">20</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">21</p>
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Birthday:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">December-26-1996</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">January 5, 1996</p>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Home Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                   <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Mobile Number:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
-                                </div>  
+                                    </div>
+                                </div>
                                 <hr>
                                 <h5>Educational Background</h5>
                                 <hr>
@@ -156,25 +156,25 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Elementary:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">HighSchool:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">None    </p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">College:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Univeristy Of San Carlos</p>
-                                    </div>  
+                                    </div>
                                 </div>
                              </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                    <header class="page-header">   
+                    <header class="page-header">
                     </header>
                         <div class="box-lg">
                             <h5>Louis Marcel Tan | Backend Programmer</h5>
@@ -190,7 +190,7 @@
                                     <li>
                                         <a class="fa fa-google-plus" href="#"></a>
                                     </li>
-                                </ul>         
+                                </ul>
                               </div>
                         </div>
                 </div>
@@ -208,38 +208,38 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Email:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Carlomarespinosa@gmail.com</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Age:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">21</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Birthday:</label>
                                     <div class="col-sm-7">
-                                            <p id="fnp" class="control-label pull-left">October-31-1995</p>
-                                    </div>  
+                                            <p id="fnp" class="control-label pull-left">October 31, 1995</p>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Home Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Nursery Street, Masbate City</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                   <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Address:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Basak, Mandaue City</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                  <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Mobile Number:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">09490395593</p>
-                                    </div>  
-                                </div>  
+                                    </div>
+                                </div>
                                 <hr>
                                 <h5>Educational Background</h5>
                                 <hr>
@@ -247,19 +247,19 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Elementary:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Jose Zurbito Senior Elementary School</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">HighSchool:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Masbate National Comprehensive High School</p>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">College:</label>
                                     <div class="col-sm-7">
                                             <p id="fnp" class="control-label pull-left">Univeristy Of San Carlos</p>
-                                    </div>  
+                                    </div>
                                 </div>
                              </div>
                         </div>
@@ -287,5 +287,5 @@
                 <div class="gap gap-small"></div>
 
 
-        </div>              
+        </div>
     </div>

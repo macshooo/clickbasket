@@ -1,9 +1,8 @@
- <body>
-     <div class="global-wrapper clearfix" id="global-wrapper">
+      <div class="global-wrapper clearfix" id="global-wrapper">
         <div class="container-fluid">
-            <div class="row">   
-             <div class="col-md-offset-3 col-md-6">        
-                    <header class="page-header">   
+            <div class="row">
+             <div class="col-md-offset-3 col-md-6">
+                    <header class="page-header">
                     </header>
 
                     <div id="emailverificationpanel" class="box-lg" style="display:block;">
@@ -14,7 +13,7 @@
                                 <!--CONTENT START-->
                                 <p>Hey There <b>Carlo</b>! Welcome to ClickBasket!</p>
 
-                                <p>We just sent a verification email to <b>Sample@sample.com</b>. Simply click the link in the email to finish setting up your ClickBasket Account!</p> 
+                                <p>We just sent a verification email to <b>Sample@sample.com</b>. Simply click the link in the email to finish setting up your ClickBasket Account!</p>
                                 <!--CONTENT START END-->
 
                                <div class="gap gap-small"></div>
@@ -57,7 +56,7 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="gap gap-small"></div>
 
         <footer class="main-footer">
@@ -144,7 +143,7 @@
                     <li><a href="#">Payments & Refunds</a>
                     </li>
                 </ul>
-                
+
             </div>
         </footer>
         <div class="copyright-area">

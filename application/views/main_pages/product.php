@@ -3,44 +3,22 @@
     <header class="page-header">
       <ol class="breadcrumb page-breadcrumb">
         <li><a href="#">Home</a></li>
-        <li><a href="#">Electronics</a></li>
-        <li><a href="#">Computers/Tables</a></li>
+        <li><a href="#"><?php echo $product_info->category_name;?></a></li>
+        <li><a href="#"><?php echo $product_info->subcategory_name;?></a></li>
         <li class="active"><?php echo $product_info->prod_name;?></li>
       </ol>
     </header>
     <div class="row">
       <div class="col-md-7">
-        <div class="jqzoom-left clearfix">
-          <ul class="jqzoom-list">
-            <li>
-              <a class="zoomThumbActive" href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: 'img/500x500.png', largeimage: 'img/800x800.png'}">
-                <img src="img/100x100.png" alt="Image Alternative text" title="Image Title" />
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: 'img/500x500.png', largeimage: 'img/800x800.png'}">
-                <img src="img/100x100.png" alt="Image Alternative text" title="Image Title" />
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: 'img/500x500.png', largeimage: 'img/800x800.png'}">
-                <img src="img/100x100.png" alt="Image Alternative text" title="Image Title" />
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: 'img/500x500.png', largeimage: 'img/800x800.png'}">
-                <img src="img/100x100.png" alt="Image Alternative text" title="Image Title" />
-              </a>
-            </li>
-          </ul>
+
           <div class="product-page-product-wrap jqzoom-stage jqzoom-stage-lg">
             <div class="clearfix">
-              <a href="img/800x800.png" id="jqzoom" data-rel="gal-1">
-                <img src="img/500x500.png" alt="Image Alternative text" title="Image Title" />
+              <a href="<?php echo base_url('assets/img/500x500.png');?>" id="jqzoom" data-rel="gal-1">
+                <img src="<?php echo base_url('assets/img/500x500.png');?>" alt="Image Alternative text" title="Image Title" />
               </a>
             </div>
           </div>
-        </div>
+
       </div>
       <div class="col-md-5">
         <div class="_box-highlight">
@@ -60,7 +38,7 @@
             }
           ?>
           <h1><?php echo $product_info->prod_name; ?></h1>
-          <p class="product-page-price">$<?php echo $product_info->storeprod_price; ?></p>
+          <p class="product-page-price">&#8369;<?php echo $product_info->storeprod_price; ?></p>
           <p class="text-muted text-sm">Free Shipping</p>
           <p class="product-page-desc-lg">Meet a stunning mobile computing experience in a very thin and lightweight Apple tablet PC. The iPad Air is powerful and efficient at the same time, thanks to its A7 chip and M7 motion coprocessor, on which the iOS 7 is running.</p>
           <ul class="product-page-actions-list">

@@ -5,23 +5,24 @@
 		}
 
 		public function userinfo($id){
-			$query = $this->db->get_where('consumers',array('consumer_id'=> $id));
+			$this->db->where('consumer_id',$id);
+			$query = $this->db->get('consumers');
 
 			if($query->num_rows() > 0){
 				return $query->row();
 			}
 		}
 
-		public function login($credentials,$password){
-			$this->db->select('consumer_id,consumer_fname,consumer_lname,email,consumer_password');
+		public function login($email,$password){
+			$this->db->select('consumer_id');
 			$this->db->from('consumers');
-			$this->db->where('email',$credentials);
+			$this->db->where('email',$email);
 			$this->db->where('consumer_password',$password);
 
-			$qry = $this->db->get();
+			$query = $this->db->get();
 
-			if($qry->num_rows() > 0){
-				return $qry->row();
+			if($query->num_rows() > 0){
+				return $query->row();
 			} else {
 				return false;
 			}
@@ -33,9 +34,13 @@
 		}
 
 		//update module for class CustomerModel
-		public function update_user($data){
+		public function update_user($usercredentials){
 			$this->db->where('consumer_id', $this->session->userdata('id'));
-			$this->db->update('consumers', $data);
+			if($this->db->update('consumers', $usercredentials)){
+				echo "Success!";
+			}else{
+				echo "Fail!";
+			}
 		}
 
 		public function check_email($email){

@@ -8,11 +8,7 @@
                 <ul class="nav navbar-nav navbar-right navbar-right-no-mar">
                     <li><a href="<?php echo site_url('maincontroller/aboutus'); ?>">About Us</a>
                     </li>
-                    <li><a href="<?php echo site_url('maincontroller/blog') ?>">Blog</a>
-                    </li>
                     <li><a href="<?php echo site_url('maincontroller/contactus') ?>">Contact Us</a>
-                    </li>
-                    <li><a href="<?php echo site_url('maincontroller/faq') ?>">FAQ</a>
                     </li>
                     <li><a href="<?php echo site_url('maincontroller/wishlist') ?>">Wishlist</a>
                     </li>

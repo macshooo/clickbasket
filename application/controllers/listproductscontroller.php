@@ -5,9 +5,18 @@
       $this->load->database(); // load database
       $this->load->model('ProductModel'); // load model
       $this->load->model('MarketModel'); // load model
+      $this->load->model('CustomerModel');
+
+      $this->userinfo = '';
+      if($this->session->userdata('logged_in') == TRUE){
+				if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
+					$this->userinfo = $user;
+				}
+	 		}
     }
 
     public function checkMarketSession(){
+      $data['userinfo'] = $this->userinfo;
 			$market = $this->session->userdata('market');
 
 			if(!empty($market)){
@@ -29,7 +38,9 @@
 
       $this->checkMarketSession();
       $products = $this->ProductModel->getProductsbySubcategory($subcatid);
+      $subcat = $this->ProductModel->getSubCategorByID($subcatid);
       $data['listproducts'] = $products;
+      $data['subcategory'] = $subcat;
 
       $this->load->view('clickbasket',$data);
       $this->load->view('navigation/mainfooter');
@@ -51,13 +62,11 @@
     }
 
     public function shoppingcart(){
+      $globalcart = $this->session->userdata('globalcart');
+      $data['cart'] = $globalcart;
       $data['title'] = 'shoppingcart';
 
-      $cartsession = $this->session->userdata('cartsession');
-      $globalcart = $this->session->userdata('globalcart');
-
-      $data['cart'] = $globalcart;
-
+      $this->checkMarketSession();
       $this->load->view('clickbasket', $data);
       $this->load->view('navigation/mainfooter');
       $this->load->view('layouts/footer');
@@ -99,64 +108,78 @@
       }
     }
 
-        public function editcart_item(){
-            $id = $this->input->post('productid');
+    public function editcart_item(){
+      $id = $this->input->post('productid');
+      $btndata = $this->input->post('data');
+      $i = 0;
 
-            if($this->session->userdata('cartsession')){
-                $cartsession = $this->session->userdata('cartsession');
-                foreach($cartsession as $row){
-                    if($row['id'] == $id){
-                        $updated = array('id'=>$row['id'], 'qty'=>$row['qty'] - 1);
-                    }else{
-                        $updated = array('id'=>$row['id'], 'qty'=>$row['qty']);
-                    }
-                }
-                $this->session->set_userdata('cartsession', $updated);
+      if($this->session->userdata('cartsession')){
+        $globalcart = $this->session->userdata('globalcart');
+        foreach($globalcart as $cart){
+          if($cart['id'] == $id){
+            if($btndata == 'subtract'){
+              $updatedqty = $cart['qty'] - 1;
+            }else{
+              $updatedqty = $cart['qty'] + 1;
             }
-
-            if($this->session->userdata('cartsession')!=NULL){
-                if($this->cartdata = $this->ProductModel->getProductToCart($this->session->userdata('cartsession'))){
-                    $this->session->set_userdata('globalcart', $this->cartdata);
-                }
-            }
-
-            print_r($updated[$id]['qty']);
+          }else{
+            $i++;
+          }
         }
-
-        public function delete_cart(){
-            $productcart = array();
-            $id = $this->input->post('productid');
-            $qty = $this->input->post('qty');
-            $i = 0;
-
-            if($this->session->userdata('cartsession')){
-                $globalcart = $this->session->userdata('globalcart');
-                foreach($globalcart as $row){
-                    if($row['id'] == $id){
-                        $row = $productcart;
-                        $i++;
-                    }else{
-                        $i++;
-                    }
-                }
-
-                for($x = 0; $x < $i; $x++){
-                    $productcart[$x]['id'] = $row['id'];
-                    $productcart[$x]['name'] = $row['name'];
-                    $productcart[$x]['desc'] = $row['desc'];
-                    $productcart[$x]['price'] = $row['price'];
-                    $productcart[$x]['qty'] = $row['qty'];
-
-                    $x++;
-                }
-            }
-
-            $this->session->set_userdata('globalcart', $productcart);
-        }
-
-        public function checkout(){
-            $this->session->unset_userdata('cartsession');
-            $this->session->unset_userdata('globalcart');
-            redirect('maincontroller');
-        }
+        $globalcart[$i]['qty'] = $updatedqty;
+        $newtotal = $globalcart[$i]['qty'] * $globalcart[$i]['price'];
+        $this->session->set_userdata('globalcart', $globalcart);
+      }
+      echo $newtotal;
     }
+
+    public function delete_cart(){
+      $productcart = array();
+      $id = $this->input->post('productid');
+      $qty = $this->input->post('qty');
+      $i = 0;
+
+      if($this->session->userdata('cartsession')){
+        $globalcart = $this->session->userdata('globalcart');
+        foreach($globalcart as $row){
+          if($row['id'] == $id){
+              $row = $productcart;
+              $i++;
+          }else{
+              $i++;
+          }
+        }
+
+        for($x = 0; $x < $i; $x++){
+          $productcart[$x]['id'] = $row['id'];
+          $productcart[$x]['name'] = $row['name'];
+          $productcart[$x]['desc'] = $row['desc'];
+          $productcart[$x]['price'] = $row['price'];
+          $productcart[$x]['qty'] = $row['qty'];
+
+          $x++;
+        }
+      }
+      $this->session->set_userdata('globalcart', $productcart);
+    }
+
+    public function placeOrder(){
+      $userdata = $this->session->userdata('userdata');
+      $globalcart = $this->session->userdata('globalcart');
+
+      if($globalcart!=NULL){
+        $total = 0;
+        foreach($globalcart as $cart){
+          $temp = $cart['price'] * $cart['qty'];
+          $total = $total + $temp;
+        }
+        $data = array(
+          'order_total' => $total,
+          'consumer_id' => $this->session->userdata('id')
+        );
+        $this->ProductModel->placeOrder($data);
+        $this->ProductModel->placeProductOrder($globalcart);
+      }
+      $this->session->unset_userdata('globalcart');
+    }
+  }

@@ -5,14 +5,14 @@
             <!--PROFILE MENU START-->
             <?php $this->load->view('navigation/profilemenu');?>
             <!--PROFILE MENU END-->
-            
+
                     <div class="col-md-9">
-                      <header class="page-header">   
+                      <header class="page-header">
                       </header>
                         <div class="box-lg">
                           <h3>My Wishlist</h3>
                             <h5></h5>
-                              <hr />        
+                              <hr />
                              <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
                                 <div class="owl-item">
                                     <div class="product  owl-item-slide">
@@ -34,13 +34,9 @@
                                                 <li><i class="fa fa-star"></i>
                                                 </li>
                                             </ul>
-                                            <h5 class="product-caption-title">Ridgid Fuego 9 Amp Compact Orbital Reciprocating Saw R3002 RECON</h5>
-                                            <div class="product-caption-price"><span class="product-caption-price-new">$99</span>
+                                            <h5 class="product-caption-title">Kopiko</h5>
+                                            <div class="product-caption-price"><span class="product-caption-price-new">59</span>
                                             </div>
-                                            <ul class="product-caption-feature-list">
-                                                <li>1 left</li>
-                                                <li>Free Shipping</li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>

@@ -1,11 +1,8 @@
- <body>
-     <div class="global-wrapper clearfix" id="global-wrapper">
-          
+<div class="global-wrapper clearfix" id="global-wrapper">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <header class="page-header">
-                        
                     </header>
                     <div class="box-lg">
                         <div class="row" data-gutter="60">
@@ -14,9 +11,9 @@
 
                                 <!--LOGIN FORM START-->
                                 <div id="login-message" style="color:red;">
-                                
+
                                 </div>
-                                 <?php $attributes = array('class' => 'form-group', 'id' => 'loginform', 'method' => 'POST'); echo form_open('secondarycontroller/checkLogin', $attributes); ?>
+                                 <?php $attributes = array('class' => 'form-group', 'id' => 'loginform', 'method' => 'POST'); echo form_open('secondarycontroller/verifyLogin', $attributes); ?>
                                         <div class="form-group">
                                             <label>E-mail or Username</label>
                                             <input class="form-control" type="text" name="email" />
@@ -48,5 +45,5 @@
                 </div>
             </div>
         </div>
-  
+
 <br>

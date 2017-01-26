@@ -1,16 +1,15 @@
 <form method="post" enctype="multiart/form-data">
   <div class="global-wrapper clearfix" id="global-wrapper">
-    <header class="page-header page-header-banner" style="background-image:url(img/1400x220.png);">
+    <header class="page-header page-header-banner" style="background-color:#009688;">
       <div class="container">
         <div class="page-header-banner-inner">
-          <h1 class="page-title">Running Shoes</h1>
+          <h1 class="page-title"><?= $subcategory->subcategory_name; ?></h1>
             <ol class="breadcrumb page-breadcrumb">
               <li><a href="#">Home</a></li>
-              <li><a href="#">Clothes &amp; Shoes</a></li>
-              <li><a href="#">Woman</a></li>
-              <li class="active">Running Shoes</li>
+              <li><a href="#"><?= $subcategory->category_name; ?></a></li>
+              <li><a href="#"><?= $subcategory->subcategory_name; ?></a></li>
             </ol>
-            <ul class="category-selections clearfix">
+            <!-- <ul class="category-selections clearfix">
               <li>
                 <a class="fa fa-th-large category-selections-icon active" href="#"></a>
               </li>
@@ -37,7 +36,7 @@
                     <option>All</option>
                   </select>
                 </li>
-              </ul>
+              </ul> -->
             </div>
           </div>
         </header>
@@ -69,60 +68,6 @@
                   </ul>
                 </div>
                 <div class="category-filters-section">
-                  <h3 class="widget-title-sm">Price</h3>
-                  <input type="text" id="price-slider" />
-                </div>
-                <div class="category-filters-section">
-                  <h3 class="widget-title-sm">Shoe Size</h3>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />6.5<span class="category-filters-amount">(75)</span>
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />7<span class="category-filters-amount">(65)</span>
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />7.5<span class="category-filters-amount">(10)</span>
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />8<span class="category-filters-amount">(44)</span>
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />8.5<span class="category-filters-amount">(27)</span>
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input class="i-check" type="checkbox" />9<span class="category-filters-amount">(35)</span>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="category-filters-section">
-                    <h3 class="widget-title-sm">Relese Date</h3>
-                      <div class="checkbox">
-                        <label>
-                          <input class="i-check" type="checkbox" />Last 30 days<span class="category-filters-amount">(46)</span>
-                        </label>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input class="i-check" type="checkbox" />Last 90 days<span class="category-filters-amount">(39)</span>
-                        </label>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input class="i-check" type="checkbox" />Comming Soon<span class="category-filters-amount">(19)</span>
-                        </label>
-                      </div>
-                    </div>
                     <div class="category-filters-section">
                       <h3 class="widget-title-sm">Brand</h3>
                         <div class="checkbox">

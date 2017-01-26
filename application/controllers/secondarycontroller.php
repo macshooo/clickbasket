@@ -1,5 +1,4 @@
 <?php
-	//controller for second navigation
 	class SecondaryController extends CI_Controller {
 		private $userinfo;
 
@@ -7,8 +6,10 @@
 			parent::__construct();
 			$this->load->model('CustomerModel');
 			$this->load->model('MarketModel'); // load model
+			$this->load->model('ProductModel');
 
-			if($this->session->userdata('logged_in')==TRUE){
+			$this->userinfo = '';
+			if($this->session->userdata('logged_in') == TRUE){
 				if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
 					$this->userinfo = $user;
 				}
@@ -16,6 +17,7 @@
 		}
 
 		public function checkMarketSession(){
+			$data['userinfo'] = $this->userinfo;
 			$market = $this->session->userdata('market');
 
 			if(!empty($market)){
@@ -33,6 +35,7 @@
 
 		public function index(){
 			$data['title'] = 'login';
+			$data['userinfo'] = $this->userinfo;
 
 			$this->checkMarketSession();
 			$this->load->view('clickbasket',$data);
@@ -41,13 +44,14 @@
 		}
 
 		//CheckLogin Verification
-		public function checkLogin() {
+		public function verifyLogin() {
 			$this->form_validation->set_rules('email','email','required', TRUE);
 			$this->form_validation->set_rules('password','password','required',TRUE);
 
 			if($this->form_validation->run() == false){
 				$data['title'] = 'login';
 
+				$this->checkMarketSession();
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -56,13 +60,15 @@
 				$password = md5($this->input->post('password'));
 
 				if($credentials = $this->CustomerModel->login($email,$password)){
-					$userdata = array('id'=>$credentials->consumer_id,'name'=> $credentials->consumer_fname,'email' => $credentials->email, 'logged_in' => TRUE );
-					$this->session->set_userdata($userdata);
+					$usercredentials = array('id' => $credentials->consumer_id,
+																	'logged_in' => TRUE );
+					$this->session->set_userdata($usercredentials);
 					redirect('maincontroller');
 				}else{
 					$this->form_validation->set_message('verifyUser','Incorrect Email Or Password. Please Try Again');
 					$data['title'] = 'login';
 
+					$this->checkMarketSession();
 					$this->load->view('clickbasket',$data);
 					$this->load->view('navigation/mainfooter');
 					$this->load->view('layouts/footer');
@@ -72,7 +78,7 @@
 
 		public function logout(){
 			$this->session->sess_destroy();
-			redirect('');
+			redirect('secondarycontroller/selectmarket');
 		}
 
 		public function register(){
@@ -96,6 +102,7 @@
 			if($this->form_validation->run()==false){
 				$data['title'] = 'register';
 
+				$this->checkMarketSession();
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -118,58 +125,61 @@
 				);
 				$this->CustomerModel->register_user($data);
 
+				$this->checkMarketSession();
 				$this->load->view('main_pages/emailverification');
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
 			}
 		}//UserRegistration
 
-	public function update_user(){
-		$email = $this->input->post('emailpost');
-		$firstname = $this->input->post('firstnamepost');
-		$lastname = $this->input->post('lastnamepost');
-		$gender = $this->input->post('genderpost');
-		$birthday = $this->input->post('birthdaypost');
-		$address = $this->input->post('addresspost');
-		$mobilenumber = $this->input->post('mobilenumberpost');
-		$password = md5($this->input->post('passwordpost'));
+		public function update_user(){
+			$email = $this->input->post('emailpost');
+			$firstname = $this->input->post('firstnamepost');
+			$lastname = $this->input->post('lastnamepost');
+			$birthday = $this->input->post('birthdaypost');
+			$address = $this->input->post('addresspost');
+			$mobilenumber = $this->input->post('mobilenumberpost');
+			$password = md5($this->input->post('passwordpost'));
+			$error = 1;
 
-		date_default_timezone_set('Asia/Manila');
-		$date = date('Y/m/d');
-		$time = date('h:i'); //set default timezone to ASIA
-		$updated_at = $date.' '.$time;
+			date_default_timezone_set('Asia/Manila');
+			$date = date('Y/m/d');
+			$time = date('h:i'); //set default timezone to ASIA
+			$updated_at = $date.' '.$time;
 
-		if($firstname != NULL){
-			$data = array('firstname' => $firstname, 'date_modified' => $updated_at);
-			$this->session->set_userdata('firstname',$firstname);
-		}else if($email){
-			$this->form_validation->set_rules('email', 'Email', 'trim|required|callback_check_email_if_exist',TRUE);
-			$data = array('email' => $email, 'date_modified' => $updated_at);
-
-			if($this->form_validation->run()==false){
-				echo "false";
+			if($firstname != NULL){
+				$usercredentials = array('consumer_fname'=>$firstname, 'date_modified'=>$updated_at);
+				$error = 0;
+			}else if($lastname){
+				$usercredentials = array('consumer_lname'=>$lastname, 'date_modified' => $updated_at);
+				$error = 0;
+			}else if($email != NULL){
+				if($this->check_email_if_exist()==false){
+					$error = 1;
+					echo "false";
+				}else{
+					$usercredentials = array('email'=>$email,'date_modified'=>$updated_at);
+					$error = 0;
+				}
+			}else if($address){
+				$usercredentials = array('address'=>$address, 'date_modified'=>$updated_at);
+				$error = 0;
+			}else if($mobilenumber){
+				$usercredentials = array('mobilenumber' => $mobilenumber, 'date_modified' => $updated_at);
+				$error = 0;
+			}else if($password){
+				$data = array('consumer_password' => $password, 'date_modified' => $updated_at);
+				$error = 0;
 			}
-		}else if($lastname){
-			$data = array('lastname' => $lastname, 'date_modified' => $updated_at);
-		}else if($gender){
-			$data = array('gender' => $gender, 'date_modified' => $updated_at);
-		}else if($birthday){
-			$data = array('birthday' => $birthday, 'date_modified' => $updated_at);
-		}else if($address){
-			$data = array('address' => $address, 'date_modified' => $updated_at);
-		}else if($mobilenumber){
-			$data = array('mobilenumber' => $mobilenumber, 'date_modified' => $updated_at);
-		}else if($password){
-			$data = array('password' => $password, 'date_modified' => $updated_at);
+
+			if($error == 0){
+				$this->CustomerModel->update_user($usercredentials);
+			}
+
 		}
 
-		$this->CustomerModel->update_user($data);
-	}
-
 	public function check_email_if_exist(){
-		$this->form_validation->set_message('check_email_if_exist', 'Email already exist');
-
-		if($this->CustomerModel->check_email($this->input->post('emailpost'))){
+			if($this->CustomerModel->check_email($this->input->post('emailpost'))){
 			return true;
 		} else {
 			echo 'exist';
@@ -192,7 +202,11 @@
 		$data['userinfo'] = $this->userinfo;
 
 		$this->checkMarketSession();
+		$orders = $this->ProductModel->getOrderInfo($this->session->userdata('id'));
+		$data['order'] = $orders;
+
 		$this->load->view('clickbasket',$data);
+		$this->load->view('navigation/viewproductsmodal');
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
 	} //Order History Page
@@ -215,20 +229,42 @@
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
-	} // Account Settings Page
+	}
 
 	public function selectmarket(){
+		$market = $this->MarketModel->getMarket();
+
 		$data['title'] = 'selectmarket';
+		$data['marketlist'] = $market;
 		$data['userinfo'] = $this->userinfo;
 
-		if($market = $this->MarketModel->getMarket()){
-			$this->market = $market;
-			$data['marketlist'] = $this->market;
-		}
-
-		$this->checkMarketSession();
+		$this->load->view('layouts/header', $data);
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
-	} // Account Settings Page
+	}
+
+	public function checkout(){
+		$globalcart = $this->session->userdata('globalcart');
+
+		if($this->session->userdata('logged_in')!=TRUE){
+			redirect('secondarycontroller');
+		}else{
+			$data['title'] = 'checkout';
+			$data['cart'] = $globalcart;
+			$data['userinfo'] = $this->userinfo;
+
+			$this->checkMarketSession();
+
+			$this->load->view('clickbasket',$data);
+			$this->load->view('navigation/mainfooter');
+			$this->load->view('layouts/footer');
+		}
+	}
+
+	public function getProductsByID(){
+		$id = $this->input->post('id');
+
+		$this->ProductModel->getOrderProductsByID($id);
+	}
 }
