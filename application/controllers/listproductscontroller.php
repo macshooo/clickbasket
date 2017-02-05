@@ -1,57 +1,39 @@
 <?php
   class ListProductsController extends CI_Controller {
+    private $limit = 1;
     public function __construct(){
       parent::__construct();
-      $this->load->database(); // load database
-      $this->load->model('ProductModel'); // load model
-      $this->load->model('MarketModel'); // load model
+      $this->load->helper('app');
+      $this->load->model('ProductModel');
+      $this->load->model('MarketModel');
       $this->load->model('CustomerModel');
-
-      $this->userinfo = '';
-      if($this->session->userdata('logged_in') == TRUE){
-				if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
-					$this->userinfo = $user;
-				}
-	 		}
     }
 
-    public function checkMarketSession(){
-      $data['userinfo'] = $this->userinfo;
-			$market = $this->session->userdata('market');
-
-			if(!empty($market)){
-				$marketcategory = $this->MarketModel->getCategory($market);
-				$marketsubcategory = $this->MarketModel->getSubCategory();
-
-				$data['marketcat'] = $marketcategory;
-				$data['marketsubcat'] = $marketsubcategory;
-
-    		$this->load->view('layouts/header', $data);
-			}else{
-				redirect('secondarycontroller/selectmarket');
-			}
-		}
-
     public function index(){
+      $subcatid = $this->input->get('subcategory');
       $data['title'] = 'productlist';
-      $subcatid = $this->input->get('id');
 
-      $this->checkMarketSession();
-      $products = $this->ProductModel->getProductsbySubcategory($subcatid);
+      $products = $this->ProductModel->getProductsbySubcategory($subcatid, $this->limit);
       $subcat = $this->ProductModel->getSubCategorByID($subcatid);
+      $total_rows = $this->ProductModel->countProducts($subcatid);
+
       $data['listproducts'] = $products;
       $data['subcategory'] = $subcat;
 
+      $page_links = pagination($total_rows, $this->limit);
+      $data['page_links'] = $page_links;
+
+      if(!$this->input->is_ajax_request()) checkMarketSession();
       $this->load->view('clickbasket',$data);
-      $this->load->view('navigation/mainfooter');
-      $this->load->view('layouts/footer');
+      if(!$this->input->is_ajax_request()) $this->load->view('navigation/mainfooter');
+      if(!$this->input->is_ajax_request()) $this->load->view('layouts/footer');
     }
 
     public function product(){
       $data['title'] = 'product';
       $prodid = $this->input->get('id');
 
-      $this->checkMarketSession();
+      checkMarketSession();
       if($prodinfo = $this->ProductModel->getStoreprodByID($prodid)){
         $data['product_info'] = $prodinfo;
 
@@ -66,7 +48,7 @@
       $data['cart'] = $globalcart;
       $data['title'] = 'shoppingcart';
 
-      $this->checkMarketSession();
+      checkMarketSession();
       $this->load->view('clickbasket', $data);
       $this->load->view('navigation/mainfooter');
       $this->load->view('layouts/footer');
@@ -109,27 +91,23 @@
     }
 
     public function editcart_item(){
+      $globalcart = $this->session->userdata('globalcart');
       $id = $this->input->post('productid');
       $btndata = $this->input->post('data');
-      $i = 0;
 
-      if($this->session->userdata('cartsession')){
-        $globalcart = $this->session->userdata('globalcart');
-        foreach($globalcart as $cart){
-          if($cart['id'] == $id){
-            if($btndata == 'subtract'){
-              $updatedqty = $cart['qty'] - 1;
-            }else{
-              $updatedqty = $cart['qty'] + 1;
-            }
+      for ($i = 0; $i < count($globalcart); $i++){
+        if($globalcart[$i]['id'] == $id){
+          if($btndata == 'subtract'){
+            $globalcart[$i]['qty']--;
+            $newtotal = $globalcart[$i]['qty'] * $globalcart[$i]['price'];
           }else{
-            $i++;
+            $globalcart[$i]['qty']++;
+            $newtotal = $globalcart[$i]['qty'] * $globalcart[$i]['price'];
           }
         }
-        $globalcart[$i]['qty'] = $updatedqty;
-        $newtotal = $globalcart[$i]['qty'] * $globalcart[$i]['price'];
-        $this->session->set_userdata('globalcart', $globalcart);
       }
+
+      $this->session->set_userdata('globalcart', $globalcart);
       echo $newtotal;
     }
 

@@ -35,15 +35,15 @@
                   <td>
                     <div class="input-group" style="width: 100px !important;">
                       <span class="input-group-btn">
-                        <button class="btn btn-danger btn-minus" type="button" onclick="updateShoppingCart('subtract');">-</button>
+                        <button class="btn btn-danger btn-minus" type="button" onclick="updateShoppingCart('subtract','<?= $cartrow["id"]?>');">-</button>
                       </span>
-                      <input class="form-control table-shopping-qty" type="text" id = "<?php echo $cartrow['id']?>" value="<?php echo $cartrow['qty']?>" style="padding-left:5px;text-align: center;"/>
+                      <input class="form-control table-shopping-qty productqty" type="text" disabled id = "<?php echo $cartrow['id']?>" value="<?php echo $cartrow['qty']?>" style="padding-left:5px;text-align: center;"/>
                       <span class="input-group-btn">
-                        <button class="btn btn-success btn-plus" type="button" onclick="updateShoppingCart('add');">+</button>
+                        <button class="btn btn-success btn-plus" type="button" onclick="updateShoppingCart('add','<?= $cartrow["id"]?>');">+</button>
                       </span>
                     </div><!-- /input-group -->
                   </td>
-                  <td id = "productTotal"><?= $cartrow['qty'] * $cartrow['price'];?></td>
+                  <td id = "productTotal_<?php echo $cartrow['id'];?>"><?= $cartrow['qty'] * $cartrow['price'];?></td>
                   <td>
                     <a class="fa fa-close table-shopping-remove" id = "removeitem_<?php echo $cartrow['id']?>" onClick = "removeItem(<?php echo $cartrow['id']?>);" value = "<?php echo $cartrow['id']?>"></a>
                   </td>
@@ -66,10 +66,6 @@
         <a class="btn btn-primary" href="<?php echo site_url('secondarycontroller/checkout'); ?>" <?php if ($cart== 0){echo 'disabled';}else{}?>>Checkout</a>
       </div>
     </div>
-    <ul class="list-inline">
-      <li><a class="btn btn-default" href="#">Continue Shopping</a></li>
-      <li><a class="btn btn-default" href="#" id = "updateCart" onClick = "updateShoppingCart();">Update Cart</a></li>
-    </ul>
   </div>
   <div class="gap"></div>
 </div>

@@ -19,26 +19,15 @@
     <link rel="stylesheet" href="<?php echo base_url().'assets/css/mystyles.css';?>">
     <link rel="stylesheet" href="<?php echo base_url().'assets/css/sweetalert.css';?>">
 
-    <script src="<?php echo base_url('assets/js/jquery-3.1.1.js');?>"></script>
-    <script src="//netsh.pp.ua/upwork-demo/1/js/typeahead.js"></script>
-
-    <script>
-      $(document).ready(function() {
-        $('#searchBar').typeahead({
-          name: 'city',
-          remote: 'city.php?query=%QUERY'
-        });
-      })
-    </script>
     <style>
-    #anchor-element {
-  display: none;
-  text-transform: uppercase;
-}
+      #anchor-element {
+        display: none;
+        text-transform: uppercase;
+      }
 
-#anchor-div:hover #anchor-element {
-  display: block;
-}
+      #anchor-div:hover #anchor-element {
+        display: block;
+      }
     </style>
   </head>
 

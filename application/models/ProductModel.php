@@ -4,6 +4,24 @@
 			parent::__construct();
 		}
 
+		public function countProducts($subcatid){
+			$this->db->select('*')
+							 ->from('store_products')
+							 ->join('products', 'products.prod_id = store_products.prod_id', 'left')
+							 ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left')
+							 ->join('store', 'store.store_id = store_products_subcategory.store_id', 'left')
+							 ->join('store_products_inventory', 'store_products_inventory.storeprod_id = store_products.storeprod_id', 'left')
+							 ->join('subcategory', 'subcategory.subcategory_id = store_products_subcategory.subcategory_id', 'left')
+							 ->join('category', 'category.category_id = subcategory.category_id', 'left')
+							 ->where('store_products.storeprod_deleted', 'false')
+							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+							 ->where('store_products_subcategory.subcategory_id', $subcatid)
+							 ->group_by('products.prod_name');
+
+			$query = $this->db->get();
+			return $query->num_rows();
+		}
+
 		public function getSubCategorByID($subcatid){
       $this->db->select('*');
       $this->db->from('subcategory');
@@ -16,7 +34,11 @@
     }
 
 		public function getProductsbySubcategory($subcatid){
-			$this->db->select('*')
+			$limit = 1;
+			$offset = $this->uri->segment(3);
+
+			$this->db->limit($limit, $offset)
+							 ->select('*')
 							 ->from('store_products')
 							 ->join('products', 'products.prod_id = store_products.prod_id', 'left')
 							 ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left')
@@ -28,6 +50,7 @@
 							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
 							 ->where('store_products_subcategory.subcategory_id', $subcatid)
                ->group_by('products.prod_name');
+
       $query = $this->db->get();
       $result = $query->result();
 

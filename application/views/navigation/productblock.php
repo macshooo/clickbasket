@@ -1,4 +1,4 @@
-<?php foreach ($listproducts as $product) {?>
+<?php foreach ($listproducts as $product):?>
   <div class="col-md-4">
     <div class="product">
       <ul class="product-labels"></ul>
@@ -42,4 +42,4 @@
         </div>
       </div>
   </div>
-<?php }?>
+<?php endforeach;?>

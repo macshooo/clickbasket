@@ -1,4 +1,4 @@
-<form method="post" enctype="multiart/form-data">
+<form method="post" enctype="multiart/form-data" id="productList">
   <div class="global-wrapper clearfix" id="global-wrapper">
     <header class="page-header page-header-banner" style="background-color:#009688;">
       <div class="container">
@@ -153,11 +153,12 @@
                       <div class="row" data-gutter="15">
                         <?php $this->load->view('navigation/productblock');?>
                       </div>
-                      <div class="row">
+                      <?php echo $page_links; ?>
+                      <!-- <div class="row">
                         <div class="col-md-6">
                           <p class="category-pagination-sign">58 items found in Cell Phones. Showing 1 - 12</p>
-                        </div>
-                        <div class="col-md-6">
+                        </div> -->
+                        <!-- <div class="col-md-6">
                           <nav>
                             <ul class="pagination category-pagination pull-right">
                               <li class="active"><a href="#">1</a></li>
@@ -168,11 +169,11 @@
                               <li class="last"><a href="#"><i class="fa fa-long-arrow-right"></i></a></li>
                             </ul>
                           </nav>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                 </div>
+              <div class="gap"></div>
             </div>
-            <div class="gap"></div>
         </div>
     </form>

@@ -162,69 +162,74 @@
 
   //MOBILE NUMBER START
   $("#cancelbutt_5").click(function(){
-  $("#cancelbutt_5").hide();
-  $("#donebutt_5").hide();
-  $("#input_5").hide();
-  $("#edit_5").show();
-  $("#text_5").show();
+    $("#cancelbutt_5").hide();
+    $("#donebutt_5").hide();
+    $("#input_5").hide();
+    $("#edit_5").show();
+    $("#text_5").show();
   });
 
   $('#donebutt_5').click(function(){
-  var mobilenumber = $('#input_5').val();
+    var mobilenumber = $('#input_5').val();
 
-  if(!mobilenumber){
-  $("#error_5").html('Please input your mobilenumber');
-  setTimeout(function() {
-            $('#error_5').html('  ');
-              },4000);
-  }
-  else{
-  $.ajax({
-     type: "POST",
-     data: {mobilenumberpost:mobilenumber},
-     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-     success: function(data){
-        $("#cancelbutt_5").hide();
-        $("#donebutt_5").hide();
-        $("#input_5").hide();
-        $("#edit_5").show();
-        $("#text_5").html(mobilenumber);
-        $("#text_5").show();
+    if(!mobilenumber){
+      $("#error_5").html('Please input your mobilenumber');
+      setTimeout(function() {
+        $('#error_5').html('  ');
+      },4000);
+    }else{
+      $.ajax({
+        type: "POST",
+        data: {mobilenumberpost:mobilenumber},
+        url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+        success: function(data){
+          $("#cancelbutt_5").hide();
+          $("#donebutt_5").hide();
+          $("#input_5").hide();
+          $("#edit_5").show();
+          $("#text_5").html(mobilenumber);
+          $("#text_5").show();
         },
-     error: function(){
+        error: function(){
         }
-    });
-  }
+      });
+    }
   });
   //MOBILE NUMBER END
 
   //PASSWORD START
   $('#donebutt_6').click(function(){
-  var password = $('#input_6').val();
+    var password = $('#input_6').val();
 
-  if(!password){
-  $("#error_6").html('Please input your password');
-  setTimeout(function() {
-            $('#error_6').html('  ');
-              },4000);
-  }
-  else{
-  $.ajax({
-     type: "POST",
-     data: {passwordpost:password},
-     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-     success: function(data){
-        $("#cancelbutt_6").hide();
-        $("#donebutt_6").hide();
-        $("#input_6").hide();
-        $("#edit_6").show();
-        $("#text_6").html();
-        $("#text_6").show();
+    if(!password){
+      $("#error_6").html('Please input your password');
+      setTimeout(function() {
+        $('#error_6').html('  ');
+      },4000);
+    }else{
+      $.ajax({
+        type: "POST",
+        data: {passwordpost:password},
+        url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+        success: function(data){
+          $("#cancelbutt_6").hide();
+          $("#donebutt_6").hide();
+          $("#input_6").hide();
+          $("#edit_6").show();
+          $("#text_6").html();
+          $("#text_6").show();
         },
-     error: function(){
+        error: function(){
         }
-    });
-  }
+      });
+    }
+  });
+
+  $("body").on("click", ".pagination a", function(){
+    var url = $(this).attr('href');
+    $("#productList").load(url);
+
+    return false;
   });
 
 	$(document).ready(function(){
@@ -284,9 +289,8 @@
     document.getElementById("changeemailpanel").style.display="block";
   }
 
-  function updateShoppingCart(btndata){
-    var productid = $(".table-shopping-qty").attr("id");
-    dataString = {productid: productid, data:btndata};
+  function updateShoppingCart(btndata,id){
+    var dataString = {productid: id, data:btndata};
 
     $.ajax({
       type: "POST",
@@ -294,7 +298,7 @@
       data: dataString,
       cache: false,
       success: function(newtotal){
-        $('#productTotal').html(newtotal);
+        $('#productTotal_'+id).html(newtotal);
       }, error: function(){
         swal('Oops!', 'Something went wrong. Please try again later', 'error');
       }
