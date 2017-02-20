@@ -21,7 +21,8 @@
               </div>
               <!--Edit Hover-->
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_1" onclick="editThis(1);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_1" onclick="editThis(1);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_1" onclick="editThis(1);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <!--Input Text-->
               <div class="col-sm-8">
@@ -45,7 +46,8 @@
               </div>
               <!--Edit Hover-->
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_2" onclick="editThis(2);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_2" onclick="editThis(2);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_2" onclick="editThis(2);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <!--Input Text-->
               <div class="col-sm-8">
@@ -70,7 +72,8 @@
                 <p id="text_3" class="control-label pull-left"><?= $userinfo->email?></p>
               </div>
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_3" onclick="editThis(3);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_3" onclick="editThis(3);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_3" onclick="editThis(3);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <div class="col-sm-8">
                 <input type="email" id="input_3" name="email" class="form-control" style="display:none;" value="<?= $userinfo->email?>" required>
@@ -88,7 +91,8 @@
                 <p id="text_4" class="control-label pull-left"><?= $userinfo->address?></p>
               </div>
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_4" onclick="editThis(4);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_4" onclick="editThis(4);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_4" onclick="editThis(4);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <div class="col-sm-8">
                 <input type="text" id="input_4" name="address" class="form-control" style="display:none;" value="<?= $userinfo->address?>" required>
@@ -106,7 +110,8 @@
                 <p id="text_5" class="control-label pull-left"><?= $userinfo->mobilenumber?></p>
               </div>
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_5" onclick="editThis(5);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_5" onclick="editThis(5);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_5" onclick="editThis(5);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <div class="col-sm-8">
                 <input type="text" id="input_5" name="mobilenumber" class="form-control" style="display:none;" value="<?= $userinfo->mobilenumber?>" required>
@@ -127,7 +132,8 @@
                 <p id="text_6" class="control-label pull-left">***********</p>
               </div>
               <div class="col-sm-5">
-                <a href="javascript:void(0)" id = "edit_6" onclick="editThis(6);"><p id="anchor-element" class="control-label pull-right">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_6" onclick="editThis(6);"><p id="anchor-element" class="control-label pull-right hidden-xs">Edit</p></a>
+                <a href="javascript:void(0)" id = "edit_6" onclick="editThis(6);"><p id="anchor-element" class="control-label pull-right visible-xs"><span class="fa fa-cog"></span></p></a>
               </div>
               <div class="col-sm-8">
                 <input type="text" id="input_6" name="password" class="form-control" style="display:none;" required>

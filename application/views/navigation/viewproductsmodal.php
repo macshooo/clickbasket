@@ -5,6 +5,7 @@
         <h5 class="modal-title" id="orderProductsModalTitle">Ordered Products</h5>
       </div>
       <div class="modal-body">
+        <div style="overflow-x:auto;">
         <table class="table table-border">
           <thead>
             <tr>
@@ -19,6 +20,7 @@
 
           </tbody>
         </table>
+      </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

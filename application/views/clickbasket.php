@@ -23,6 +23,10 @@
 		$this->load->view('main_pages/product');
 	}
 
+	if($title =='forgotpassword'){
+		$this->load->view('main_pages/forgotpassword');
+	}
+
 	if($title =='shoppingcart'){
 		$this->load->view('main_pages/shoppingcart');
 	}

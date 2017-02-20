@@ -20,8 +20,8 @@
 
   function checkMarketSession(){
     $ci =&get_instance();
-
     $ci->userinfo = '';
+
     $market = $ci->session->userdata('market');
 
     if($ci->session->userdata('logged_in') == TRUE){

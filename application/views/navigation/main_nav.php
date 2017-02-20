@@ -10,8 +10,8 @@
                     </li>
                     <li><a href="<?php echo site_url('maincontroller/contactus') ?>">Contact Us</a>
                     </li>
-                    <li><a href="<?php echo site_url('maincontroller/wishlist') ?>">Wishlist</a>
-                    </li>
+                    <!-- <li><a href="<?php echo site_url('maincontroller/wishlist') ?>">Wishlist</a>
+                    </li> -->
                     <li><a href="<?php echo site_url('maincontroller/help') ?>">Help</a>
                     </li>
                 </ul>

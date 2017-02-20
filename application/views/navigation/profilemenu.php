@@ -7,7 +7,7 @@
     <ul class="dropdown-menu-items-list">
       <li><a href="<?php echo site_url('secondarycontroller/profile'); ?>">My Profile</a></li>
       <li><a href="<?php echo site_url('secondarycontroller/orderhistory'); ?>">My Orders</a> </li>
-      <li><a href="<?php echo site_url('secondarycontroller/wishlist'); ?>">My Wishlist</a></li>
+      <!-- <li><a href="<?php echo site_url('secondarycontroller/wishlist'); ?>">My Wishlist</a></li> -->
       <hr />
       <li><a href="<?php echo site_url('secondarycontroller/logout');?>">Logout</a></li>
     </ul>

@@ -1,14 +1,13 @@
- <script src="<?php echo base_url().'assets/js/jquery.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/bootstrap.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/icheck.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/ionrangeslider.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/jqzoom.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/card-payment.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/owl-carousel.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/magnific.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/custom.js';?>"></script>
- <script src="<?php echo base_url().'assets/js/sweetalert.min.js';?>"></script>
-
+ <script src="<?php echo base_url('assets/js/jquery.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/bootstrap.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/icheck.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/ionrangeslider.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/jqzoom.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/card-payment.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/owl-carousel.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/magnific.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/custom.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/sweetalert.min.js');?>"></script>
 </body>
 
 </html>
@@ -44,6 +43,7 @@
          data: {firstnamepost:firstname},
          url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
          success: function(data){
+          swal("Update successfully");
           $("#cancelbutt_1").hide();
           $("#donebutt_1").hide();
           $("#input_1").hide();
@@ -73,6 +73,7 @@
      data: {lastnamepost:lastname},
      url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
      success: function(data){
+       swal("Update successfully");
         $("#cancelbutt_2").hide();
         $("#donebutt_2").hide();
         $("#input_2").hide();
@@ -115,6 +116,7 @@
               },4000);
         }
           else{
+        swal("Update successfully");
         $("#cancelbutt_3").hide();
         $("#donebutt_3").hide();
         $("#input_3").hide();
@@ -132,31 +134,31 @@
 
   //ADDRESS START
   $('#donebutt_4').click(function(){
-  var address = $('#input_4').val();
+    var address = $('#input_4').val();
 
-  if(!address){
-  $("#error_4").html('Please input your address');
-  setTimeout(function() {
-            $('#error_4').html('  ');
-              },4000);
-  }
-  else{
-  $.ajax({
-     type: "POST",
-     data: {addresspost:address},
-     url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
-     success: function(data){
-        $("#cancelbutt_4").hide();
-        $("#donebutt_4").hide();
-        $("#input_4").hide();
-        $("#edit_4").show();
-        $("#text_4").html(address);
-        $("#text_4").show();
+    if(!address){
+      $("#error_4").html('Please input your address');
+      setTimeout(function() {
+        $('#error_4').html('  ');
+      },4000);
+    }else{
+      $.ajax({
+        type: "POST",
+        data: {addresspost:address},
+        url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+        success: function(data){
+          swal("Update successfully");
+          $("#cancelbutt_4").hide();
+          $("#donebutt_4").hide();
+          $("#input_4").hide();
+          $("#edit_4").show();
+          $("#text_4").html(address);
+          $("#text_4").show();
         },
-     error: function(){
+        error: function(){
         }
-    });
-  }
+      });
+    }
   });
   //ADDRESS END
 
@@ -183,6 +185,7 @@
         data: {mobilenumberpost:mobilenumber},
         url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
         success: function(data){
+          swal("Update successfully");
           $("#cancelbutt_5").hide();
           $("#donebutt_5").hide();
           $("#input_5").hide();
@@ -212,6 +215,7 @@
         data: {passwordpost:password},
         url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
         success: function(data){
+          swal("Update successfully");
           $("#cancelbutt_6").hide();
           $("#donebutt_6").hide();
           $("#input_6").hide();
@@ -225,28 +229,30 @@
     }
   });
 
-  $("body").on("click", ".pagination a", function(){
-    var url = $(this).attr('href');
-    $("#productList").load(url);
-
-    return false;
-  });
+  // $("body").on("click", ".pagination a", function(){
+  //   var url = $(this).attr('href');
+  //   $("#productList").load(url);
+  //
+  //   return false;
+  // });
 
 	$(document).ready(function(){
 		$("#addtocart").click(function(){
 			var productid = $("#addtocart").val();
 			var qty = $("#qty_" + productid).val();
+      var finalPrice = $("#price_" + productid).html();
+      var price = finalPrice.substring(1,finalPrice.length);
 			var pName = $("#addtocart").attr('name');
 
 			if(qty == 0){
 				swal('No item selected to add to cart!', 'error');
 				return false;
 			}else{
-				var dataString = {productid: productid, qty: qty};
+				var dataString = {productid: productid, qty: qty, finalprice: price};
 
 				$.ajax({
 					type: "POST",
-					url: "<?php echo base_url(); ?>"+"listproductscontroller/input_cart",
+					url: "<?php echo base_url('listproductscontroller/input_cart');?>",
 					data: dataString,
 					cache: false,
 					success: function(){
@@ -269,7 +275,7 @@
     $('#placeorder').click(function(){
       $.ajax({
         type: "POST",
-        url: "<?php echo base_url();?>"+"listproductscontroller/placeOrder",
+        url: "<?php echo base_url('listproductscontroller/placeOrder');?>",
         success: function(){
           swal('Success!', 'The order has successfully been processed!', 'success');
         }, error: function(){
@@ -287,6 +293,32 @@
   function changeemail(){
     document.getElementById("emailverificationpanel").style.display="none";
     document.getElementById("changeemailpanel").style.display="block";
+  }
+
+  function ajaxSearch(){
+    var inputData = $('#searchData').val();
+
+    if(inputData.length == 0){
+      $('#suggestions').hide();
+    }else{
+      var postData = {
+        'searchData': inputData,
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url('listproductscontroller/getStoreProducts');?>",
+        data: postData,
+        success: function (data) {
+          // return success
+          if (data.length > 0) {
+            $('#suggestions').show();
+            $('#autoSuggestionsList').addClass('auto_list');
+            $('#autoSuggestionsList').html(data);
+          }
+        }
+      });
+    }
   }
 
   function updateShoppingCart(btndata,id){
@@ -307,9 +339,8 @@
 
 	function removeItem(id){
 		var productid = $("#removeitem_" + id).attr("value");
-		var qty = $("#qty").val();
 
-		var dataString = {productid: productid, qty: qty};
+		var dataString = {productid: productid};
 
 		swal({
   			title: "Are you sure?",
@@ -324,11 +355,11 @@
 		function(){
 			$.ajax({
 				type: "POST",
-				url: "<?php echo base_url(); ?>"+"listproductscontroller/delete_cart",
+				url: "<?php echo base_url('listproductscontroller/deleteItemfromCart'); ?>",
 				data: dataString,
 				cache:false,
 				success: function(){
-					swal("Deleted!", "Your imaginary file has been deleted.", "success");
+					swal("Deleted!", "The product has been deleted.", "success");
 					$('#cartrow_' + id).remove();
 				}, error: function(){
 					swal("Oops!", "Something went wrong. Please try again.", "error");
@@ -354,4 +385,40 @@
       }
     });
   }
+</script>
+<script>
+$(document).ready(function(){
+    $("#p1").mouseover(function(){
+              $("#p2").fadeIn();
+              $("#p1").fadeOut();
+    });
+    $("#p2").mouseout(function(){
+              $("#p2").fadeOut();
+              $("#p1").fadeIn();
+    });
+});
+</script>
+<script>
+$(document).click(function(){
+  var rating5 = $("#star5").val();
+  var rating4 = $("#star4").val();
+  var rating3 = $("#star3").val();
+  var rating2 = $("#star2").val();
+  var rating1 = $("#star1").val();
+});
+
+function rateThis(rateid,storeprodsubid){
+
+  $.ajax({
+    type: "post",
+    url: '<?php echo base_url("listproductscontroller/productRating");?>',
+    data: {ratepost:rateid,storeprodsubidpost:storeprodsubid},
+    success: function(data){
+     swal("You Rate "+rateid+" Star!", "Thank you for rating! :)");
+    },
+    error: function(data){
+    swal("error","Please Log-in your Account","error");
+    }
+  });
+}
 </script>

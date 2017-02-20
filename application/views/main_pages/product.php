@@ -10,26 +10,27 @@
     </header>
     <div class="row">
       <div class="col-md-7">
-
-          <div class="product-page-product-wrap jqzoom-stage jqzoom-stage-lg">
-            <div class="clearfix">
-              <a href="<?php echo base_url('assets/img/500x500.png');?>" id="jqzoom" data-rel="gal-1">
-                <img src="<?php echo base_url('assets/img/500x500.png');?>" alt="Image Alternative text" title="Image Title" />
-              </a>
-            </div>
+        <div class="product-page-product-wrap jqzoom-stage jqzoom-stage-lg">
+          <div class="clearfix">
+            <a href="<?= $this->config->item('panel_url').'assets/images/prod_image/'.$product_info->storeprod_image?>" id="jqzoom" data-rel="gal-1">
+              <img src="<?= $this->config->item('panel_url').'assets/images/prod_image/'.$product_info->storeprod_image?>" alt="Image Alternative text" title="Image Title" />
+            </a>
           </div>
-
+        </div>
       </div>
       <div class="col-md-5">
         <div class="_box-highlight">
-          <ul class="product-page-product-rating">
-            <li class="rated"><i class="fa fa-star"></i></li>
-            <li class="rated"><i class="fa fa-star"></i></li>
-            <li class="rated"><i class="fa fa-star"></i></li>
-            <li class="rated"><i class="fa fa-star"></i></li>
-            <li class="rated"><i class="fa fa-star"></i></li>
-          </ul>
-          <p class="product-page-product-rating-sign"><a href="#">238 customer reviews</a></p>
+          <div class="row">
+            <fieldset class="rating">
+              <input type="radio" id="star5" onclick="rateThis(5,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="5" <?= (round($productrating_info->Ratings)=='5')?'checked':''?>/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+              <input type="radio" id="star4" onclick="rateThis(4,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="4" <?= (round($productrating_info->Ratings)=='4')?'checked':''?>/><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+              <input type="radio" id="star3" onclick="rateThis(3,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="3" <?= (round($productrating_info->Ratings)=='3')?'checked':''?>/><label class = "full" for="star3" title="Meh - 3 stars"></label>
+              <input type="radio" id="star2" onclick="rateThis(2,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="2" <?= (round($productrating_info->Ratings)=='2')?'checked':''?>/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+              <input type="radio" id="star1" onclick="rateThis(1,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="1" <?= (round($productrating_info->Ratings)=='1')?'checked':''?>/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+            </fieldset>
+          </div>
+          <p>Customer reviews <?= round($productrating_info->Ratings)?></p>
+          <p class="product-page-product-rating-sign"><a href="#"></a></p>
           <?php
             if ($product_info->inventory_stock == '0'){
               echo '<span class="label label-danger">No Stock</span>';
@@ -37,10 +38,19 @@
               echo '<span class="label label-warning">Low Stock</span>';
             }
           ?>
-          <h1><?php echo $product_info->prod_name; ?></h1>
-          <p class="product-page-price">&#8369;<?php echo $product_info->storeprod_price; ?></p>
-          <p class="text-muted text-sm">Free Shipping</p>
-          <p class="product-page-desc-lg">Meet a stunning mobile computing experience in a very thin and lightweight Apple tablet PC. The iPad Air is powerful and efficient at the same time, thanks to its A7 chip and M7 motion coprocessor, on which the iOS 7 is running.</p>
+          <h2><?= $product_info->prod_name;?></h2>
+          <?php
+            if (isset($productDiscount)){
+              $discount = $productDiscount->discount / 100;
+              $discountrate = $productDiscount->storeprod_price * $discount;
+              $newprice = $productDiscount->storeprod_price - $discountrate;
+              echo '<del>&#8369;'.$productDiscount->storeprod_price.'</del>';
+              echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$newprice.'</p>';
+            }else{
+              echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
+            }?>
+          <!-- <p class="text-muted text-sm">Free Shipping</p> -->
+          <p class="product-page-desc-lg"><?= $product_info->prod_desc;?></p>
           <ul class="product-page-actions-list">
             <li class="product-page-qty-item">
               <button class="product-page-qty product-page-qty-minus">-</button>
@@ -49,17 +59,17 @@
             </li>
             <li>
               <?php if ($product_info->inventory_stock > '1'){ ?>
-                <button class="btn btn-lg btn-primary" value="<?php echo $product_info->storeprod_id;?>" name="<?php echo $product_info->prod_name;?>" id = "addtocart"><i class="fa fa-shopping-cart"></i>Add to Cart</button><?php
+                <button class="btn btn-lg btn-primary" value="<?= $product_info->storeprod_id;?>" name="<?= $product_info->prod_name;?>" id = "addtocart"><i class="fa fa-shopping-cart"></i>Add to Cart</button><?php
               } ?>
             </li>
-            <li><a class="btn btn-lg btn-default" href="#"><i class="fa fa-star"></i>Wishlist</a></li>
+            <!-- <li><a class="btn btn-lg btn-default" href="#"><i class="fa fa-star"></i>Wishlist</a></li> -->
           </ul>
         </div>
         <br/>
       </div>
     </div>
     <div class="gap"></div>
-    <div class="tabbable product-tabs">
+    <!-- <div class="tabbable product-tabs">
       <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#tab-1" data-toggle="tab">Description</a></li>
         <li><a href="#tab-2" data-toggle="tab">Additional Information</a></li>
@@ -151,7 +161,42 @@
         </div>
       </div>
     </div>
-    <div class="gap"></div>
+    <div class="gap"></div> -->
+<!-- 
+    <h3 class="widget-title">Related Products</h3>
+      <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
+        <div class="owl-item">
+          <div class="product  owl-item-slide">
+            <ul class="product-labels"></ul>
+            <div class="product-img-wrap">
+              <img class="product-img" src="<?php echo base_url().'assets/img/product_img/3.png'; ?>" alt="Image Alternative text" title="Image Title" />
+            </div>
+            <a class="product-link" href="#"></a>
+            <div class="product-caption">
+              <ul class="product-caption-rating">
+                <li class="rated"><i class="fa fa-star"></i>
+                </li>
+                <li class="rated"><i class="fa fa-star"></i>
+                </li>
+                <li class="rated"><i class="fa fa-star"></i>
+                </li>
+                <li class="rated"><i class="fa fa-star"></i>
+                </li>
+                <li><i class="fa fa-star"></i>
+                </li>
+              </ul>
+              <h5 class="product-caption-title">Apple</h5>
+              <div class="product-caption-price"><span class="product-caption-price-new">$99</span>
+              </div>
+              <ul class="product-caption-feature-list">
+                <li>1 left</li>
+                <li>Free Shipping</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="gap"></div>
   </div>
   <div class="gap"></div>
 </div>

@@ -19,7 +19,7 @@
             <tbody>
               <?php if(count($cart)!= 0) {
                 $total = 0;
-                foreach($cart as $cartrow){
+                foreach($cart as $cartrow):
                   $temp = $cartrow['price'] * $cartrow['qty'];?>
                   <tr>
                     <td><?= $cartrow['market'];?></td>
@@ -27,12 +27,13 @@
                     <td><?= $cartrow['qty'];?></td>
                     <td>&#8369;<?php echo $cartrow['price'] * $cartrow['qty'];?></td>
                   </tr>
-                  <?php $total = $total + $temp; }
-              }else{
-                echo '<tr>
-                      <td colspan="4">Empty!</td>
-                      </tr>';
-              }?>
+                  <?php $total = $total + $temp;
+                endforeach;
+              }else{?>
+                <tr>
+                  <td colspan="4">Empty!</td>
+                </tr>';
+              <?php }?>
             </tbody>
           </table>
         </div>
@@ -76,24 +77,6 @@
         <h3 class="widget-title">Payment</h3>
         <div class="cc-form">
           <div class="clearfix">
-            <div class="form-group form-group-cc-number">
-              <label>Cart Sub Total:</label>
-            </div>
-            <div class="form-group form-group-cc-cvc">
-              <label>&#8369;<?php echo $total;?></label>
-            </div>
-            <div class="form-group form-group-cc-number">
-              <label>Tax:</label>
-            </div>
-            <div class="form-group form-group-cc-cvc">
-              <label>&#8369;</label>
-            </div>
-            <div class="form-group form-group-cc-number">
-              <label>Shipping Fee:</label>
-            </div>
-            <div class="form-group form-group-cc-cvc">
-              <label>&#8369;</label>
-            </div>
             <div class="form-group form-group-cc-number">
               <h3>Grand Total:</h3>
             </div>

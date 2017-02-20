@@ -28,6 +28,13 @@
 			}
 		}
 
+
+		public function getConsumerByEmail($email){
+    $this->db->where('email', $email);
+    $query = $this->db->get('consumers');
+    return $query->row();
+  }
+
 		//Register Module for class CustomerModel
 		public function register_user($data){
 				$this->db->insert('consumers', $data);

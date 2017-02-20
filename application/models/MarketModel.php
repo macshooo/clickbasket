@@ -15,12 +15,25 @@
       }
     }
 
+
+     public function getMarketByID(){
+          $this->db->select('*');
+          $this->db->from('store');
+          $this->db->where('store_id',$this->session->userdata('market'));
+           $query = $this->db->get();
+
+           if($query->num_rows() > 0){
+            return $query->row();
+           }
+        }
+
     public function getCategory($marketid){
       $this->db->select('*')
                ->from('store_category')
                ->join('store', 'store_category.store_id = store.store_id')
                ->join('category', 'store_category.category_id = category.category_id')
-               ->where('store.store_id', $marketid);
+               ->where('store.store_id', $marketid)
+               ->where('category_deleted', 'false');
       $query = $this->db->get();
       $result = $query->result();
 
@@ -28,8 +41,9 @@
     }
 
     public function getSubCategory(){
-      $this->db->select('*');
-      $this->db->from('subcategory');
+      $this->db->select('*')
+               ->from('subcategory')
+               ->where('subcategory_deleted', 'false');
       $query = $this->db->get();
       $result = $query->result();
 

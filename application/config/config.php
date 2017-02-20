@@ -24,6 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/ClickBasket/';
+$config['panel_url'] = 'http://192.168.0.185/ClickBasketPanel/';
 
 /*
 |--------------------------------------------------------------------------

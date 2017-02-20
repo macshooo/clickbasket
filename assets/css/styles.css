@@ -3049,7 +3049,7 @@ header.main {
   color: #fff;
 }
 .product-labels > li {
-  background: #486d97;
+  background: #f00;
   color: #fff;
   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.4);
   box-shadow: 0 1px 2px rgba(0,0,0,0.4);

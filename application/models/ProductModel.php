@@ -22,19 +22,18 @@
 			return $query->num_rows();
 		}
 
-		public function getSubCategorByID($subcatid){
-      $this->db->select('*');
-      $this->db->from('subcategory');
-			$this->db->join('category','subcategory.category_id = category.category_id');
-			$this->db->where('subcategory_id',$subcatid);
+		public function getSubCategoryByID($subcatid){
+      $this->db->select('*')
+      				 ->from('subcategory')
+							 ->join('category','subcategory.category_id = category.category_id')
+							 ->where('subcategory_id',$subcatid);
       $query = $this->db->get();
       $result = $query->row();
 
       return $result;
     }
 
-		public function getProductsbySubcategory($subcatid){
-			$limit = 1;
+		public function getProductsbySubcategory($subcatid, $limit){
 			$offset = $this->uri->segment(3);
 
 			$this->db->limit($limit, $offset)
@@ -44,6 +43,8 @@
 							 ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left')
 							 ->join('store', 'store.store_id = store_products_subcategory.store_id', 'left')
 							 ->join('store_products_inventory', 'store_products_inventory.storeprod_id = store_products.storeprod_id', 'left')
+							 ->join('store_products_rating', 'store_products_rating.storeprodsub_id = store_products_subcategory.storeprodsub_id', 'left')
+							 ->join('store_products_discounts', 'store_products_discounts.storeprod_id = store_products.storeprod_id', 'left')
 							 ->join('subcategory', 'subcategory.subcategory_id = store_products_subcategory.subcategory_id', 'left')
 							 ->join('category', 'category.category_id = subcategory.category_id', 'left')
 							 ->where('store_products.storeprod_deleted', 'false')
@@ -59,6 +60,46 @@
 
 		public function getStoreprodByID($prodid){
 			$this->db->select('*')
+		 					 ->from('store_products')
+						   ->join('products', 'products.prod_id = store_products.prod_id', 'left')
+						   ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left')
+						   ->join('store', 'store.store_id = store_products_subcategory.store_id', 'left')
+						   ->join('store_products_inventory', 'store_products_inventory.storeprod_id = store_products.storeprod_id', 'left')
+						   ->join('subcategory', 'subcategory.subcategory_id = store_products_subcategory.subcategory_id', 'left')
+						   ->join('category', 'category.category_id = subcategory.category_id', 'left')
+						   ->where('store_products.storeprod_deleted', 'false')
+						   ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+						   ->where('store_products.prod_id', $prodid);
+
+			$query = $this->db->get();
+
+			if($query->num_rows() > 0){
+				return $query->row();
+			}else{
+				return false;
+			}
+		}
+
+		public function getDiscounts($prodid){
+			$today = date('Y-m-d');
+			$this->db->select('*')
+		 					 ->from('store_products')
+							 ->join('store_products_discounts', 'store_products_discounts.storeprod_id = store_products.storeprod_id')
+							 ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id')
+							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+							 ->where('store_products.prod_id', $prodid)
+							 ->where('store_products_discounts.date_start <=', $today)
+							 ->where('store_products_discounts.date_end >=', $today);
+
+			$query = $this->db->get();
+
+			if($query->num_rows() > 0){
+				return $query->row();
+			}
+		}
+
+		public function getMarketProducts($searchData){
+			$this->db->select('*')
 							 ->from('store_products')
 							 ->join('products', 'products.prod_id = store_products.prod_id', 'left')
 							 ->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left')
@@ -68,50 +109,45 @@
 							 ->join('category', 'category.category_id = subcategory.category_id', 'left')
 							 ->where('store_products.storeprod_deleted', 'false')
 							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
-							 ->where('store_products.prod_id', $prodid);
+							 ->like('products.prod_name', $searchData);
 			$query = $this->db->get();
-			$result = $query->row();
+			$result = $query->result();
 
 			return $result;
 		}
 
  		public function getProductToCart($data){
-      $products = array();
+      $this->db->select('*')
+      				 ->from('store_products')
+							 ->join('products', 'store_products.prod_id = products.prod_id')
+							 ->join('store_products_subcategory', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
+							 ->join('store', 'store_products_subcategory.store_id = store.store_id')
+							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+      				 ->where('store_products.prod_id',$data['id']);
+      $query = $this->db->get();
+      $prod = $query->row();
 
-      foreach($data as $row){
-        $this->db->select('*')
-        				 ->from('store_products')
-								 ->join('products', 'store_products.prod_id = products.prod_id')
-								 ->join('store_products_subcategory', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
-								 ->join('store', 'store_products_subcategory.store_id = store.store_id')
-								 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
-        				 ->where('store_products.prod_id',$row['id']);
-        $query = $this->db->get();
-        $prod = $query->row();
+			$market = $prod->store_name;
+			$marketid = $prod->store_id;
+			$image = $prod->storeprod_image;
+			$id = $prod->prod_id;
+			$name = $prod->prod_name;
+			$price = $data['price'];
+			$qty = $data['qty'];
 
-				$market = $prod->store_name;
-				$marketid = $prod->store_id;
-				$id = $prod->prod_id;
-				$name = $prod->prod_name;
-				$desc = $prod->prod_desc;
-				$price = $prod->storeprod_price;
-				$qty = $row['qty'];
-
-				$products[] = compact('market',
-															'marketid',
-															'id',
-															'name',
-															'desc',
-															'price',
-															'qty');
-			}
-
+			$products = compact('market',
+													'marketid',
+													'image',
+													'id',
+													'name',
+													'price',
+													'qty');
 			if($products!=0){
 				return $products;
 			}else{
 				return false;
 			}
- 		}
+		}
 
 		public function placeOrder($data){
 			$this->db->insert('orders', $data);
@@ -123,14 +159,24 @@
 
 			if(isset($row)){
 				foreach($globalcart as $cart){
-					$query2 = $this->db->query('SELECT storeprodsub_id FROM store_products_subcategory WHERE storeprod_id = '.$cart['id'].' AND store_id = '.$cart['marketid'].'');
+					$query2 = $this->db->select('*')
+														 ->from('store_products_subcategory')
+														 ->join('store_products', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
+														 ->join('store_products_inventory', 'store_products_inventory.storeprod_id = store_products.storeprod_id')
+														 ->where('store_products_subcategory.storeprod_id', $cart['id'])
+														 ->where('store_products_subcategory.store_id', $cart['marketid'])
+													 	 ->get();
 					$row2 = $query2->row();
 					$data = array(
 						'order_id' => $row->order_id,
 						'storeprodsub_id' => $row2->storeprodsub_id,
 						'order_qty' => $cart['qty'],
+						'product_price'=> $cart['price'],
 						'product_total' => $cart['qty'] * $cart['price']
 					);
+					$this->db->set('store_products_inventory.inventory_stock', 'store_products_inventory.inventory_stock - "'.$cart['qty'].'"', FALSE)
+									 ->where('storeprod_id', $row2->storeprod_id)
+									 ->update('store_products_inventory');
 					$this->db->insert('orders_store_products', $data);
 				}
 			}
@@ -158,5 +204,81 @@
 			$result = $query->result();
 
 			echo json_encode($result);
+
+		}
+
+		public function getOrderDetail($userid, $orderid){
+			$this->db->select('*')
+							 ->from('orders')
+							 ->where('orders.consumer_id', $userid)
+							 ->where('orders.order_id', $orderid);
+		 $query = $this->db->get();
+	   $result = $query->row();
+
+		 return $result;
+		}
+
+		public function getOrderProductDetail($userid, $orderid){
+			$this->db->select('*')
+							 ->from('orders_store_products')
+							 ->join('orders', 'orders_store_products.order_id = orders.order_id')
+							 ->join('consumers', 'consumers.consumer_id = orders.consumer_id')
+							 ->join('store_products_subcategory', 'orders_store_products.storeprodsub_id = store_products_subcategory.storeprodsub_id')
+							 ->join('store_products', 'store_products_subcategory.storeprod_id = store_products.storeprod_id')
+							 ->join('products', 'store_products.prod_id = products.prod_id')
+							 ->where('orders_store_products.order_id',$orderid)
+							 ->where('orders.consumer_id', $userid);
+			$query = $this->db->get();
+			$result = $query->result();
+
+			return $result;
+		}
+
+		public function productRating($data,$prodid){
+				 $this->db->select('*')
+										->from('store_products_rating')
+					 				 ->join('store_products_subcategory', 'store_products_subcategory.storeprodsub_id = store_products_rating.storeprodsub_id','left')
+									 ->join('store_products', 'store_products.storeprod_id = store_products_subcategory.storeprod_id','left')
+									 ->join('products', 'products.prod_id = store_products.prod_id','left')
+									 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+									 ->where('store_products_subcategory.storeprodsub_id', $prodid)
+									 ->where('consumer_id',$this->session->userdata('id'));
+				$result = $this->db->get();
+
+				if($result->num_rows() > 0){
+						$this->db->where('consumer_id',$this->session->userdata('id'))
+										 ->where('storeprodsub_id', $prodid);
+						$this->db->update('store_products_rating',$data);
+				}else{
+						$this->db->insert('store_products_rating',$data);
+				}
+		}
+
+		public function getProductRating($prodid){
+			$this->db->select('*, avg(storeprod_rating) as Ratings')
+						   ->from('store_products_rating')
+							 ->join('store_products_subcategory', 'store_products_subcategory.storeprodsub_id = store_products_rating.storeprodsub_id')
+							 ->join('store_products', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
+							 ->join('products', 'products.prod_id = store_products.prod_id')
+							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+							 ->where('store_products.prod_id', $prodid);
+
+				$query = $this->db->get();
+				return $query->row();
+		}
+
+		public function prodByRating(){
+			$this->db->select('*')
+						   ->from('store_products_rating')
+							 ->join('store_products_subcategory', 'store_products_subcategory.storeprodsub_id = store_products_rating.storeprodsub_id')
+							 ->join('store_products', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
+							 ->join('products', 'products.prod_id = store_products.prod_id')
+							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
+							 ->group_by('prod_name')
+							 ->select_avg('storeprod_rating')
+							 ->order_by('storeprod_rating', 'desc');
+
+				$query = $this->db->get();
+				return $query->result();
 		}
  }

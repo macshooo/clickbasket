@@ -1,43 +1,19 @@
 <?php
 	class SecondaryController extends CI_Controller {
-		private $userinfo;
+var $consumerdata;
 
 		public function __construct(){
 			parent::__construct();
+			$this->load->helper('app');
 			$this->load->model('CustomerModel');
 			$this->load->model('MarketModel'); // load model
 			$this->load->model('ProductModel');
-
-			$this->userinfo = '';
-			if($this->session->userdata('logged_in') == TRUE){
-				if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
-					$this->userinfo = $user;
-				}
-	 		}
-		}
-
-		public function checkMarketSession(){
-			$data['userinfo'] = $this->userinfo;
-			$market = $this->session->userdata('market');
-
-			if(!empty($market)){
-				$marketcategory = $this->MarketModel->getCategory($market);
-				$marketsubcategory = $this->MarketModel->getSubCategory();
-
-				$data['marketcat'] = $marketcategory;
-				$data['marketsubcat'] = $marketsubcategory;
-
-    		$this->load->view('layouts/header', $data);
-			}else{
-				redirect('secondarycontroller/selectmarket');
-			}
 		}
 
 		public function index(){
 			$data['title'] = 'login';
-			$data['userinfo'] = $this->userinfo;
 
-			$this->checkMarketSession();
+			checkMarketSession();
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
@@ -51,7 +27,7 @@
 			if($this->form_validation->run() == false){
 				$data['title'] = 'login';
 
-				$this->checkMarketSession();
+				checkMarketSession();
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -65,16 +41,62 @@
 					$this->session->set_userdata($usercredentials);
 					redirect('maincontroller');
 				}else{
-					$this->form_validation->set_message('verifyUser','Incorrect Email Or Password. Please Try Again');
+					$this->session->set_flashdata('login_msg', 'Incorrect Email and Password');
 					$data['title'] = 'login';
 
-					$this->checkMarketSession();
+					checkMarketSession();
 					$this->load->view('clickbasket',$data);
 					$this->load->view('navigation/mainfooter');
 					$this->load->view('layouts/footer');
 			 	}
 			}
 		}
+
+
+		public function forgotpassword(){
+			$data['title'] = 'forgotpassword';
+
+			checkMarketSession();
+			$this->load->view('clickbasket',$data);
+			$this->load->view('navigation/mainfooter');
+			$this->load->view('layouts/footer');
+
+		}
+
+		public function forgotPass(){
+					$email = $this->input->post('email');
+					$type = 'forgotpass';
+
+						$this->sendEmail($email,$type);
+			}
+
+			function sendEmail($email,$type){
+		    $this->load->library('email');
+
+		    $this->email->from('clickbasketph@gmail.com', 'ClickBasket');
+		    $this->email->to($email);
+
+				if($consumer = $this->CustomerModel->getConsumerByEmail($email)){
+					$this->consumerdata = $consumer;
+				}
+
+				$data['consumerdata'] = $this->consumerdata;
+
+		    $this->email->subject('ClickBasket: Forgot Password');
+
+				if($type == 'forgotpass'){
+					$body = $this->load->view('emails/forgotpassword',$data,TRUE);
+				}else{
+					$body = $this->load->view('emails/confirmation',$data,TRUE);
+				}
+
+		    $this->email->message($body);
+		    if($this->email->send()){
+		      echo 'Email sent. '.$this->email->print_debugger();
+		     }else{
+		       echo $this->email->print_debugger();
+		    }
+		  }
 
 		public function logout(){
 			$this->session->sess_destroy();
@@ -84,25 +106,75 @@
 		public function register(){
 			$data['title'] = 'register';
 
-			$this->checkMarketSession();
+			checkMarketSession();
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');
-		}//RegistrationController
+		}
 
 		public function register_user(){
-			$this->form_validation->set_rules('firstname','Firstname', 'trim|required',TRUE);
-			$this->form_validation->set_rules('lastname','Lastname', 'trim|required', TRUE);
-			$this->form_validation->set_rules('phonenumber','PhoneNumber', 'trim|required', TRUE);
-			$this->form_validation->set_rules('address','Address', 'trim|required', TRUE);
-			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_check_email_if_exist',TRUE);
-			$this->form_validation->set_rules('password','Password', 'trim|required|alpha_numeric|min_length[10]',TRUE);
-			$this->form_validation->set_rules('confirmpassword','Confirm password', 'trim|required|alpha_numeric|min_length[10]|matches[password]',TRUE);
+			$config = array(
+									array(
+										'field'=>'firstname',
+										'label'=>'Firstname',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'Firstname is required.',
+										),
+									),
+									array(
+										'field'=>'lastname',
+										'label'=>'Lastname',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'Lastname is required.',
+										),
+									),
+									array(
+										'field'=>'phonenumber',
+										'label'=>'PhoneNumber',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'Phone number is required.',
+										),
+									),
+									array(
+										'field'=>'address',
+										'label'=>'Address',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'Address is required.',
+										),
+									),
+									array(
+										'field'=>'email',
+										'label'=>'Email',
+										'rules'=>'trim|required|valid_email|callback_checkEmail',
+										'errors'=>array(
+																'valid_email'=>'Please enter a valid email address',
+																'checkEmail'=>'The email already exists',
+										),
+									),
+									array(
+										'field'=>'password',
+										'label'=>'Password',
+										'rules'=>'trim|required|alpha_numeric|min_length[10]'
+									),
+									array(
+										'field'=>'confirmpassword',
+										'label'=>'Confirm password',
+										'rules'=>'trim|required|matches[password]',
+										'errors'=>array(
+																'matches'=>'Passwords must match!',
+										),
+									)
+			);
+			$this->form_validation->set_rules($config);
 
 			if($this->form_validation->run()==false){
 				$data['title'] = 'register';
 
-				$this->checkMarketSession();
+				checkMarketSession();
 				$this->load->view('clickbasket',$data);
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
@@ -125,8 +197,8 @@
 				);
 				$this->CustomerModel->register_user($data);
 
-				$this->checkMarketSession();
-				$this->load->view('main_pages/emailverification');
+				checkMarketSession();
+				$this->load->view('main_pages/login');
 				$this->load->view('navigation/mainfooter');
 				$this->load->view('layouts/footer');
 			}
@@ -178,20 +250,18 @@
 
 		}
 
-	public function check_email_if_exist(){
-			if($this->CustomerModel->check_email($this->input->post('emailpost'))){
+	public function checkEmail($str){
+		if($this->CustomerModel->check_email($str)){
 			return true;
 		} else {
-			echo 'exist';
 			return false;
 		}
 	}
 
 	public function profile(){
 		$data['title'] = 'profile';
-		$data['userinfo'] = $this->userinfo;
 
-		$this->checkMarketSession();
+		checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -199,9 +269,8 @@
 
 	public function orderhistory(){
 		$data['title'] = 'orderhistory';
-		$data['userinfo'] = $this->userinfo;
 
-		$this->checkMarketSession();
+		checkMarketSession();
 		$orders = $this->ProductModel->getOrderInfo($this->session->userdata('id'));
 		$data['order'] = $orders;
 
@@ -213,9 +282,8 @@
 
 	public function wishlist(){
 		$data['title'] = 'wishlist';
-		$data['userinfo'] = $this->userinfo;
 
-		$this->checkMarketSession();
+		checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
@@ -223,20 +291,25 @@
 
 	public function accountsettings(){
 		$data['title'] = 'accountsettings';
-		$data['userinfo'] = $this->userinfo;
 
-		$this->checkMarketSession();
+		checkMarketSession();
 		$this->load->view('clickbasket',$data);
 		$this->load->view('navigation/mainfooter');
 		$this->load->view('layouts/footer');
 	}
 
 	public function selectmarket(){
+		$this->userinfo = '';
 		$market = $this->MarketModel->getMarket();
-
 		$data['title'] = 'selectmarket';
 		$data['marketlist'] = $market;
-		$data['userinfo'] = $this->userinfo;
+
+		if($this->session->userdata('logged_in') == TRUE){
+      if($user = $this->CustomerModel->userinfo($this->session->userdata('id'))){
+        $this->userinfo = $user;
+				$data['userinfo'] = $this->userinfo;
+      }
+    }
 
 		$this->load->view('layouts/header', $data);
 		$this->load->view('clickbasket',$data);
@@ -252,10 +325,8 @@
 		}else{
 			$data['title'] = 'checkout';
 			$data['cart'] = $globalcart;
-			$data['userinfo'] = $this->userinfo;
 
-			$this->checkMarketSession();
-
+			checkMarketSession();
 			$this->load->view('clickbasket',$data);
 			$this->load->view('navigation/mainfooter');
 			$this->load->view('layouts/footer');

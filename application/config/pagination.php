@@ -17,4 +17,5 @@
   $config['cur_tag_close'] = '</a></li>';
   $config['num_tag_open'] = '<li>';
   $config['num_tag_close'] = '</li>';
+  $config['reuse_query_string'] = true;
 ?>
