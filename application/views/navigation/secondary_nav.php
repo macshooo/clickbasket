@@ -57,7 +57,7 @@
           </li>
         <?php }else{ ?>
           <li class="dropdown"><a href="#" data-toggle="dropdown"><i class="drop-caret" data-toggle="dropdown"></i><span>Welcome</span><?= $userinfo->consumer_fname ?></a>
-            <ul class="dropdown-menu" role="menu" style="background-color:white;">
+            <ul class="dropdown-menu " role="menu" style="background-color:white;">
               <li><a href="<?php echo site_url('secondarycontroller/profile');?>"><i class="fa fa-user"></i> Manage my account</a></li>
               <li><a href="<?php echo site_url('secondarycontroller/orderhistory');?>"><i class="fa fa-inbox"></i> My Orders</a></li>
               <!-- <li><a href="<?php echo site_url('secondarycontroller/wishlist');?>"><i class="fa fa-heart"></i> Wishlist</a></li> -->
@@ -68,13 +68,15 @@
         <?php } ?>
         <?php $marketinfo_?>
         <li class="dropdown visible-xs"><a href="#" data-toggle="dropdown"><i class="drop-caret" data-toggle="dropdown"></i><span>&nbsp</span>Select Market</a>
-            <ul class="dropdown-menu" role="menu" style="background-color:white;">
-              <?php foreach ($marketlist as $market){?>
-              <li><a href="<?php echo site_url('maincontroller/getMarket?id='.$market->store_id);?>"><?php echo $market->store_name;?></a></li>
-              <?php }?>
-            </ul>
-          </li>
-        <li><a href="<?php echo site_url('listproductscontroller/shoppingcart') ?>"><span ></span><i class="fa fa-shopping-cart"></i></a>
+          <ul class="dropdown-menu" role="menu" style="background-color:white;">
+            <?php foreach ($marketlist as $market){?>
+            <li><a href="<?php echo site_url('maincontroller/getMarket?id='.$market->store_id);?>"><?php echo $market->store_name;?></a></li>
+            <?php }?>
+          </ul>
+        </li>
+        <li>
+          <!-- <a href="<?php echo site_url('listproductscontroller/shoppingcart') ?>"><span><span class="badge badge-notify"><?= count($this->session->userdata('globalcart'));?></span></span><i class="fa fa-shopping-cart"></i></a> -->
+          <a href="<?php echo site_url('listproductscontroller/shoppingcart') ?>"><i class="fa fa-shopping-cart"></i><span><span id="cartBadge" class="badge badge-notify"><?= count($this->session->userdata('globalcart'));?></span></span></a>
         </li>
        </ul>
      </div>

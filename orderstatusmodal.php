@@ -1,4 +1,4 @@
-<div class="modal fade" id="orderProductsModal" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="orderStatusModal" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -16,7 +16,7 @@
               <th>Product Total</th>
             </tr>
           </thead>
-          <tbody id="orderProductsBody">
+          <tbody id="orderStatusBody">
 
           </tbody>
         </table>

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/font-awesome.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/styles.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/sweetalert.css');?>">
+    <script src="<?php echo base_url('assets/js/sweetalert.min.js');?>"></script>
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap-datetimepicker.css');?>">
     <link rel="shortcut icon" href="<?php echo base_url('assets/img/tab_icon.png');?>">
 
     <style>

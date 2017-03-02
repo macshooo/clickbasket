@@ -1,6 +1,6 @@
 <?php
 	class SecondaryController extends CI_Controller {
-var $consumerdata;
+		var $consumerdata;
 
 		public function __construct(){
 			parent::__construct();
@@ -52,7 +52,6 @@ var $consumerdata;
 			}
 		}
 
-
 		public function forgotpassword(){
 			$data['title'] = 'forgotpassword';
 
@@ -64,11 +63,11 @@ var $consumerdata;
 		}
 
 		public function forgotPass(){
-					$email = $this->input->post('email');
-					$type = 'forgotpass';
+			$email = $this->input->post('email');
+			$type = 'forgotpass';
 
-						$this->sendEmail($email,$type);
-			}
+			$this->sendEmail($email,$type);
+		}
 
 			function sendEmail($email,$type){
 		    $this->load->library('email');
@@ -139,11 +138,43 @@ var $consumerdata;
 										),
 									),
 									array(
-										'field'=>'address',
-										'label'=>'Address',
+										'field'=>'building',
+										'label'=>'Building',
 										'rules'=>'trim|required',
 										'errors'=>array(
-																'required'=>'Address is required.',
+																'required'=>'This is a required field.',
+										),
+									),
+									array(
+										'field'=>'street',
+										'label'=>'Street',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'This is a required field.',
+										),
+									),
+									array(
+										'field'=>'floorunitroom',
+										'label'=>'FloorUnitRoom',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'This is a required field.',
+										),
+									),
+									array(
+										'field'=>'city',
+										'label'=>'City',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'This is a required field.',
+										),
+									),
+									array(
+										'field'=>'postcode',
+										'label'=>'PostCode',
+										'rules'=>'trim|required',
+										'errors'=>array(
+																'required'=>'This is a required field.',
 										),
 									),
 									array(
@@ -189,13 +220,23 @@ var $consumerdata;
 					'consumer_fname' => ucfirst($this->input->post('firstname')),
 					'consumer_lname' => ucfirst($this->input->post('lastname')),
 					'mobilenumber'=> $this->input->post('phonenumber'),
-					'address'=> $this->input->post('address'),
 					'email' => $this->input->post('email'),
 					'consumer_password'=> md5($this->input->post('password')),
 					'date_created' => $date_created,
 					'date_modified'=> $date_created,
 				);
-				$this->CustomerModel->register_user($data);
+				$id = $this->CustomerModel->register_user($data);
+
+				$address = array(
+					'building_name' => ucfirst($this->input->post('building')),
+					'street_name' => ucfirst($this->input->post('street')),
+					'floorunitroom_num' => ucfirst($this->input->post('floorunitroom')),
+					'city_name' => ucfirst($this->input->post('city')),
+					'postcode' => $this->input->post('postcode'),
+					'consumer_id' => $id,
+				);
+
+				$this->CustomerModel->registerAddress($address);
 
 				checkMarketSession();
 				$this->load->view('main_pages/login');
@@ -203,6 +244,29 @@ var $consumerdata;
 				$this->load->view('layouts/footer');
 			}
 		}//UserRegistration
+		public function register_address(){
+			$id = $this->CustomerModel->register_user($data);
+
+			$buildingname = $this->input->post('buildingname');
+			$street = $this->input->post('street');
+			$floorunitroom = $this->input->post('floorunitroom');
+			$city = $this->input->post('city');
+			$postcode = $this->input->post('postcode');
+			$sample= "hello";
+
+			$address = array(
+				'building_name'=>$buildingname,
+				'street_name'=>$street,
+				'floorunitroom_num'=>$floorunitroom,
+				'city_name'=>$city,
+				'postcode'=>$postcode,
+				'instructions'=>$sample,
+				'consumer_id' => $id
+			);
+
+				$this->CustomerModel->registerAddress($address);
+		}
+
 
 		public function update_user(){
 			$email = $this->input->post('emailpost');
@@ -248,6 +312,28 @@ var $consumerdata;
 				$this->CustomerModel->update_user($usercredentials);
 			}
 
+		}
+
+		public function update_user_address(){
+				$buildingname = $this->input->post('buildingname');
+				$street = $this->input->post('street');
+				$floorunitroom = $this->input->post('floorunitroom');
+				$city = $this->input->post('city');
+				$postcode = $this->input->post('postcode');
+
+				date_default_timezone_set('Asia/Manila');
+				$date = date('Y/m/d');
+				$time = date('h:i'); //set default timezone to ASIA
+				$updated_at = $date.' '.$time;
+
+				$useraddress = array(
+					'building_name'=>$buildingname,
+					'street_name'=>$street,
+					'floorunitroom_num'=>$floorunitroom,
+					'city_name'=>$city,
+					'postcode'=>$postcode,
+				);
+				$this->CustomerModel->update_user_address($useraddress);
 		}
 
 	public function checkEmail($str){
@@ -325,6 +411,7 @@ var $consumerdata;
 		}else{
 			$data['title'] = 'checkout';
 			$data['cart'] = $globalcart;
+			$data['coupon'] = $this->ProductModel->getCoupon();
 
 			checkMarketSession();
 			$this->load->view('clickbasket',$data);

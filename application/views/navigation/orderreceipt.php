@@ -52,6 +52,8 @@ $pdf->Ln(5);
 // Consumer Info
 $pdf->SetFillColor(249,249,249);
 $pdf->Cell(0, 0, 'Date Issued: '.$orderinfo->date_created, 0, 1, 'R', 0, '', 0);
+$pdf->SetFillColor(249,249,249);
+$pdf->Cell(0, 0, 'Date Completed: '.$orderinfo->date_modified, 0, 1, 'R', 0, '', 0);
 // $pdf->Cell(0, 0, 'Market: SM SuperMarket', 0, 1, 'R', 0, '', 1);
 
 $pdf->Ln(10);
@@ -67,17 +69,26 @@ $pdf->SetFont('helveticaB', '', 12);
 $pdf->Cell(45, 0, 'Shipping Address:', 0, 1, 'L', 0, '', 0);
 
 $pdf->SetFont('helvetica', '', 12);
-$pdf->Cell(45, 0,$userinfo->address, 0, 1, 'L', 0, '', 0);
+$pdf->Cell(45, 0,$userinfo->floorunitroom_num.', '.$userinfo->building_name.', '.$userinfo->building_name.', '.$userinfo->city_name , 0, 1, 'L', 0, '', 0);
 
 $pdf->Ln(5);
 
 $pdf->SetFont('helveticaB', '', 12);
 $pdf->Cell(45, 0, 'Contact: ', 0, 1, 'L', 0, '', 0);
-
-$carlo ='caaaarlo';
 $pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(45, 0, $userinfo->email, 0, 1, 'L', 0, '', 0);
 $pdf->Cell(45, 0,$userinfo->mobilenumber, 0, 1, 'L', 0, '', 1);
+
+$pdf->Ln(5);
+
+$pdf->SetFont('helveticaB', '', 12);
+$pdf->Cell(45, 0, 'Used Coupon: ', 0, 1, 'L', 0, '', 0);
+$pdf->SetFont('helvetica', '', 12);
+if($orderinfo->coupons_use == 'true'){
+	$pdf->Cell(45, 0, 'Yes', 0, 1, 'L', 0, '', 0);
+}else{
+	$pdf->Cell(45, 0, 'No', 0, 1, 'L', 0, '', 0);
+}
 
 $pdf->Ln(10);
 
@@ -86,21 +97,31 @@ $html = '<table border="1" cellpadding="10">';
 foreach ($productorder_info as $productinfo) {
 
       $html .= '<tr style="background-color:#365271; color:white;">
-          <td width="50%"> Product </td>
-          <td width="25%"> Quantity </td>
+				  <td width="30%"> Market </td>
+					<td width="25%"> Product </td>
+          <td width="15%"> Quantity </td>
           <td width="25%"> Price </td>
       </tr>';
     $html .= '<tr>
-        <td width="50%">' . $productinfo->prod_name . '</td>
-        <td width="25%">' . $productinfo->order_qty . '</td>
-        <td width="25%">' . $productinfo->storeprod_price . '</td>
+				<td width="30%">'.$productinfo->store_name.'</td>
+        <td width="25%">'.$productinfo->prod_name.'</td>
+        <td width="15%">'.$productinfo->order_qty.'</td>
+        <td width="25%">PHP'.$productinfo->storeprod_price.'</td>
       </tr>';
 }
 $html .= '</table>';
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-$pdf->Cell(174, 0,'Total: '. $orderinfo->order_total, 0, 1, 'R', 0, '', 0);
+$pdf->SetFont('helveticaB', '', 10);
+$pdf->Cell(174, 0,'Subtotal: PHP '. $orderinfo->order_subtotal, 0, 1, 'R', 0, '', 0);
+$pdf->SetFont('helveticaB', '', 10);
+$pdf->Cell(174, 0,'VAT: 12%', 0, 1, 'R', 0, '', 0);
+$pdf->SetFont('helveticaB', '', 10);
+$pdf->Cell(174, 0,'VATable Sales: PHP '. $orderinfo->order_vat, 0, 1, 'R', 0, '', 0);
+
+$pdf->SetFont('helveticaB', '', 15);
+$pdf->Cell(174, 0,'Total: PHP '.  $orderinfo->grandtotal, 0, 1, 'R', 0, '', 0);
 // -----------------------------------------------------------------------------
 
 //Close and output PDF document

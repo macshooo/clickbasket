@@ -61,7 +61,19 @@
       </div>
       <div class="col-md-2">
         <ul class="shopping-cart-total-list">
-          <li><span>Total</span><span id = "total"><?= isset($cartotal) ? $cartotal : 0;?></span></li>
+          <?php if (isset($cartotal)){
+            $vatamount = $cartotal * .12;
+            $vatsales = $cartotal - $vatamount;
+            echo '<li><span>Total</span><span id = "total">&#8369;'.round($vatsales, 2).'</span></li>
+                  <li>
+                    <span>VAT</span><span>12%</span>
+                    <span>VATable Sales</span><span>&#8369;'.round($vatamount, 2).'</span>
+                  </li>
+                  <li><span>Grand Total</span><span id = "total">&#8369;'.$cartotal.'</span></li>';
+          }else{
+            echo '<li><span>Total</span><span id = "total">&#8369; 0</span></li>';
+          }
+          ?>
         </ul>
         <a class="btn btn-primary" href="<?php echo site_url('secondarycontroller/checkout'); ?>" <?php if ($cart== 0){echo 'disabled';}else{}?>>Checkout</a>
       </div>

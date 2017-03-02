@@ -29,36 +29,50 @@
               <input type="radio" id="star1" onclick="rateThis(1,<?php echo $product_info->storeprodsub_id;?>);" name="rating" value="1" <?= (round($productrating_info->Ratings)=='1')?'checked':''?>/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
             </fieldset>
           </div>
-          <p>Customer reviews <?= round($productrating_info->Ratings)?></p>
+          <p>Customer reviews: <?= $productrating_count?></p>
           <p class="product-page-product-rating-sign"><a href="#"></a></p>
           <?php
-            if ($product_info->inventory_stock == '0'){
+            if ($product_info->BALANCE == '0'){
               echo '<span class="label label-danger">No Stock</span>';
-            }else if($product_info->inventory_stock <= '5'){
+            }else if($product_info->BALANCE <= '20'){
               echo '<span class="label label-warning">Low Stock</span>';
             }
           ?>
           <h2><?= $product_info->prod_name;?></h2>
-          <?php
-            if (isset($productDiscount)){
-              $discount = $productDiscount->discount / 100;
-              $discountrate = $productDiscount->storeprod_price * $discount;
-              $newprice = $productDiscount->storeprod_price - $discountrate;
-              echo '<del>&#8369;'.$productDiscount->storeprod_price.'</del>';
-              echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$newprice.'</p>';
+          <?php if (isset($discounts)){
+            $date = date("Y-m-d");
+            if($discounts->date_start <= $date && $discounts->date_end >= $date){
+              if($discounts->discount_type == 'percentage'){
+                $discount = $discounts->discount / 100;
+                $discountrate = $product_info->storeprod_price * $discount;
+                $newprice = $product_info->storeprod_price - $discountrate;
+                echo '<span class="label label-danger">'.floor($discounts->discount).'% off!</span><br>';
+                echo '<del>&#8369;'.$product_info->storeprod_price.'</del>';
+                echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.round($newprice, 2).'</p>';
+              }else{
+                $newprice = $product_info->storeprod_price - $discounts->discount;
+                echo '<span class="label label-danger">&#8369;'.$discounts->discount.' off!</span><br>';
+                echo '<del>&#8369;'.$product_info->storeprod_price.'</del>';
+                echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.round($newprice, 2).'</p>';
+              }
             }else{
               echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
-            }?>
+            }
+          }else{
+            echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
+          }?>
           <!-- <p class="text-muted text-sm">Free Shipping</p> -->
           <p class="product-page-desc-lg"><?= $product_info->prod_desc;?></p>
           <ul class="product-page-actions-list">
             <li class="product-page-qty-item">
               <button class="product-page-qty product-page-qty-minus">-</button>
-              <input class="product-page-qty product-page-qty-input qty " id="qty_<?php echo $product_info->storeprod_id;?>" type="text" value="1" />
+              <input class="product-page-qty product-page-qty-input qty" id="qty_<?php echo $product_info->storeprod_id;?>" type="text" value="1" />
               <button class="product-page-qty product-page-qty-plus">+</button>
+              <!--Identifying the current stock-->
+              <input type="hidden" id="max_<?= $product_info->storeprod_id;?>" value="<?= $product_info->BALANCE; ?>">
             </li>
             <li>
-              <?php if ($product_info->inventory_stock > '1'){ ?>
+              <?php if ($product_info->BALANCE > '1'){ ?>
                 <button class="btn btn-lg btn-primary" value="<?= $product_info->storeprod_id;?>" name="<?= $product_info->prod_name;?>" id = "addtocart"><i class="fa fa-shopping-cart"></i>Add to Cart</button><?php
               } ?>
             </li>
@@ -162,7 +176,7 @@
       </div>
     </div>
     <div class="gap"></div> -->
-<!-- 
+<!--
     <h3 class="widget-title">Related Products</h3>
       <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
         <div class="owl-item">

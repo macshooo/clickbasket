@@ -7,12 +7,19 @@
  <script src="<?php echo base_url('assets/js/owl-carousel.js');?>"></script>
  <script src="<?php echo base_url('assets/js/magnific.js');?>"></script>
  <script src="<?php echo base_url('assets/js/custom.js');?>"></script>
- <script src="<?php echo base_url('assets/js/sweetalert.min.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/moment.min.js');?>"></script>
+ <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.min.js');?>"></script>
 </body>
 
 </html>
 
 <script type="text/javascript">
+  $(function () {
+    $('#datetimepicker1').datetimepicker({
+      minDate:new Date()
+    });
+  });
+
   function editThis(id){
     $("#cancelbutt_"+id).show();
     $("#donebutt_"+id).show();
@@ -27,6 +34,14 @@
     $("#input_"+id).hide();
     $("#edit_"+id).show();
     $("#text_"+id).show();
+  }
+
+  function newAddressForm(){
+    $("#showform").show();
+  }
+
+  function cancelnewAddressForm(){
+    $("#showform").hide();
   }
 
   //FIRSTNAME START
@@ -134,33 +149,61 @@
 
   //ADDRESS START
   $('#donebutt_4').click(function(){
-    var address = $('#input_4').val();
+    var buildingname = $('#buildingname').val();
+    var street = $('#street').val();
+    var floorunitroom = $('#floorunitroom').val();
+    var city = $('#city').val();
+    var postcode = $('#postcode').val();
 
-    if(!address){
-      $("#error_4").html('Please input your address');
-      setTimeout(function() {
-        $('#error_4').html('  ');
-      },4000);
+    $.ajax({
+      type: "POST",
+      data: {buildingname:buildingname,street:street,city:city,postcode:postcode, floorunitroom: floorunitroom},
+      url: '<?php echo base_url("secondarycontroller/update_user_address"); ?>',
+      success: function(data){
+        swal("Update successfully");
+        $("#cancelbutt_4").hide();
+        $("#donebutt_4").hide();
+        $("#input_4").hide();
+        $("#edit_4").show();
+        $("#buildingname_text").html(buildingname);
+        $("#street_text").html(street);
+        $("#city_text").html(city);
+        $("#postcode_text").html(postcode);
+        $('#floorunitroom').html(floorunitroom);
+        $("#text_4").show();
+      },
+      error: function(data){
+        console.log(data)
+      }
+    });
+  });
+  //ADDRESS END
+
+  //NEW ADDRESS START
+  $('#newAddress').click(function(){
+    var buildingname = $('#newbuildingname').val();
+    var street = $('#newstreet').val();
+    var city = $('#newcity').val();
+    var postcode = $('#newpostcode').val();
+
+    if(!buildingname || !street || !city || !postcode){
+      swal("Error","Some fields are empty!","error");
     }else{
       $.ajax({
         type: "POST",
-        data: {addresspost:address},
-        url: '<?php echo base_url("secondarycontroller/update_user"); ?>',
+        data: {buildingname:buildingname,street:street,city:city,postcode:postcode},
+        url: '<?php echo base_url("secondarycontroller/register_address"); ?>',
         success: function(data){
-          swal("Update successfully");
-          $("#cancelbutt_4").hide();
-          $("#donebutt_4").hide();
-          $("#input_4").hide();
-          $("#edit_4").show();
-          $("#text_4").html(address);
-          $("#text_4").show();
+          swal("New Address","Is Added successfully","success");
         },
-        error: function(){
+        error: function(data){
+          console.log(data)
+          alert('otin');
         }
       });
     }
   });
-  //ADDRESS END
+  //NEW ADDRESS END
 
   //MOBILE NUMBER START
   $("#cancelbutt_5").click(function(){
@@ -229,13 +272,6 @@
     }
   });
 
-  // $("body").on("click", ".pagination a", function(){
-  //   var url = $(this).attr('href');
-  //   $("#productList").load(url);
-  //
-  //   return false;
-  // });
-
 	$(document).ready(function(){
 		$("#addtocart").click(function(){
 			var productid = $("#addtocart").val();
@@ -243,24 +279,50 @@
       var finalPrice = $("#price_" + productid).html();
       var price = finalPrice.substring(1,finalPrice.length);
 			var pName = $("#addtocart").attr('name');
+      var badgeCount = parseInt($('#cartBadge').html());
+
+      var currBal = parseInt($('#max_'+productid).val());
 
 			if(qty == 0){
-				swal('No item selected to add to cart!', 'error');
-				return false;
+        swal({
+          title: "No item selected!",
+          timer: 1000,
+          showConfirmButton: false
+        });
 			}else{
-				var dataString = {productid: productid, qty: qty, finalprice: price};
+        if(qty > currBal){
+          swal({
+            title: "Quantity entered exceeds current stock!",
+            timer: 1000,
+            showConfirmButton: false
+          });
+        }else{
+          var dataString = {productid: productid, qty: qty, finalprice: price};
 
-				$.ajax({
-					type: "POST",
-					url: "<?php echo base_url('listproductscontroller/input_cart');?>",
-					data: dataString,
-					cache: false,
-					success: function(){
-						swal('Success!', pName +' has been added to you cart!', 'success');
-					}, error: function(){
-						swal('Oops!', 'Something went wrong. Please try again later', 'error');
-					}
-				});
+  				$.ajax({
+  					type: "POST",
+  					url: "<?php echo base_url('listproductscontroller/input_cart');?>",
+  					data: dataString,
+  					cache: false,
+  					success: function(){
+              swal('Success!', pName +' has been added to you cart!', 'success');
+              swal({
+                title: "Success!",
+                text: pName +' has been added to you cart!',
+                type: "success",
+                closeOnConfirm: true,
+                animation: "slide-from-top",
+                inputPlaceholder: "Place Order"
+              },
+              function(){
+                location.reload();
+              });
+
+  					}, error: function(){
+  						swal('Oops!', 'Something went wrong. Please try again later', 'error');
+  					}
+  				});
+        }
 			}
 		});
 
@@ -273,17 +335,79 @@
 		})
 
     $('#placeorder').click(function(){
-      $.ajax({
-        type: "POST",
-        url: "<?php echo base_url('listproductscontroller/placeOrder');?>",
-        success: function(){
-          swal('Success!', 'The order has successfully been processed!', 'success');
-        }, error: function(){
-          swal('Oops!', 'Something went wrong. Please try again later', 'error');
+      var couponid = $("#couponid").val();
+      var etaDelivery = $("#datetimepicker1").find("input").val();
+      var subtotal = $("#subtotal").html().substring(1,$("#subtotal").html().length);
+      var vat = $("#vatamount").html().substring(1,$("#vatamount").html().length);
+      var gtotal = $("#gTotal").html().substring(1,$("#gTotal").html().length);
+
+      var dataString = {couponid: couponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
+
+      swal({
+        title: "Confirm!",
+        text: "Are you sure of your order?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Place Order",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url('listproductscontroller/placeOrder');?>",
+          data: dataString,
+          cache: false,
+          success: function(){
+            swal('Success!', 'The order has successfully been processed!', 'success');
+
+            window.location.href = "<?php echo base_url('secondarycontroller/orderhistory');?>";
+            window.location.href.preventDefault();
+          }, error: function(){
+            swal('Oops!', 'Something went wrong. Please try again later', 'error');
+          }
+        })
+      });
+    });
+
+    $("#p1").mouseover(function(){
+      $("#p2").fadeIn();
+      $("#p1").fadeOut();
+    });
+
+    $("#p2").mouseout(function(){
+      $("#p2").fadeOut();
+      $("#p1").fadeIn();
+    });
+
+    $("#prev_address").change(function(){
+      $(this).find("option:selected").each(function(){
+        var optionValue = $(this).attr("value");
+        if(optionValue == 'newAddress'){
+          $("#text_address").css('text-decoration','line-through');
+          $("#new_address").show();
+          $("#done_button").show();
+          $("#cancel_button").show();
+
+          window.addEventListener("beforeunload", function (e) {
+            var confirmationMessage = 'It looks like you have been editing something. '
+                                    + 'If you leave before saving, your changes will be lost.';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+          });
         }
-      })
+      });
     });
 	});
+
+  $(document).click(function(){
+    var rating5 = $("#star5").val();
+    var rating4 = $("#star4").val();
+    var rating3 = $("#star3").val();
+    var rating2 = $("#star2").val();
+    var rating1 = $("#star1").val();
+  });
 
   function emailverification(){
     document.getElementById("emailverificationpanel").style.display="block";
@@ -380,45 +504,121 @@
       success: function(data) {
         $('#orderProductsBody').empty();
         for(var i=0; i < data.length; i++){
-          $('#orderProductsBody').append('<tr> <td></td> <td>'+data[i].prod_name+'</td> <td>'+data[i].order_qty+'</td> <td>'+data[i].storeprod_price+'</td> <td></td> </tr>');
+          $('#orderProductsBody').append('<tr> <td>'+data[i].store_name+'</td> <td>'+data[i].prod_name+'</td> <td>'+data[i].order_qty+'</td> <td>'+data[i].product_price+'</td> <td>'+data[i].product_total+'</td> </tr>');
         }
       }
     });
   }
-</script>
-<script>
-$(document).ready(function(){
-    $("#p1").mouseover(function(){
-              $("#p2").fadeIn();
-              $("#p1").fadeOut();
-    });
-    $("#p2").mouseout(function(){
-              $("#p2").fadeOut();
-              $("#p1").fadeIn();
-    });
-});
-</script>
-<script>
-$(document).click(function(){
-  var rating5 = $("#star5").val();
-  var rating4 = $("#star4").val();
-  var rating3 = $("#star3").val();
-  var rating2 = $("#star2").val();
-  var rating1 = $("#star1").val();
-});
 
-function rateThis(rateid,storeprodsubid){
-
-  $.ajax({
-    type: "post",
-    url: '<?php echo base_url("listproductscontroller/productRating");?>',
-    data: {ratepost:rateid,storeprodsubidpost:storeprodsubid},
-    success: function(data){
-     swal("You Rate "+rateid+" Star!", "Thank you for rating! :)");
+  function couponCode(){
+    var grandTotal = $('#gTotal').html();
+    swal({
+      title: "",
+      text: "Enter your coupon code here:",
+      type: "input",
+      showCancelButton: true,
+      closeOnConfirm: false,
+      animation: "slide-from-top",
+      inputPlaceholder: "Coupon Code"
     },
-    error: function(data){
-    swal("error","Please Log-in your Account","error");
-    }
-  });
-}
+    function(inputValue){
+      if (inputValue === false) return false;
+
+      if (inputValue === "") {
+      swal.showInputError("You need to write something!");
+      return false
+      }
+
+      $.ajax({
+        type: "post",
+        url: '<?php echo base_url("listproductscontroller/checkCoupon");?>',
+        data: {coupon: inputValue, grandTotal: grandTotal},
+        success: function(data){
+          if(data == 'false'){
+            swal.showInputError("That seems to be an invalid coupon");
+          }else if(data == 'exist'){
+            swal.showInputError("Coupon has already been activated");
+          }else{
+            swal({
+              title: "Activated!",
+              text: 'Coupon code activated',
+              type: "success",
+              closeOnConfirm: true,
+              animation: "slide-from-top",
+              inputPlaceholder: "Coupon Code"
+            },
+            function(){
+              location.reload();
+            });
+          }
+        },
+        error: function(){
+          swal("Oops","Something went wrong! Please try again later.","error");
+        }
+      });
+    });
+  }
+
+  function cancelOrder(id){
+    swal({
+      title: "Cancel Order!",
+      text: "Why do you want to cancel your order?",
+      type: "input",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Cancel Order",
+      closeOnConfirm: false,
+      inputPlaceholder: "Cancelling Reason..."
+    },
+    function(inputValue){
+      if(inputValue != false){
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url('listproductscontroller/cancelOrder');?>",
+          data: {id:id,inputValue:inputValue},
+          cache: false,
+          success: function(){
+            swal({
+              title: "Cancelled!",
+              text: 'The order has been cancelled!',
+              type: "success",
+              closeOnConfirm: false,
+              animation: "slide-from-top"
+            },
+            function(){
+              location.reload();
+            });
+          }, error: function(){
+            swal('Oops!', 'Something went wrong. Please try again later', 'error');
+          }
+        });
+      }
+    });
+  }
+
+  function orderStatus(decline){
+    swal("Reason for cancellation:", decline);
+  }
+
+  function rateThis(rateid,storeprodsubid){
+    $.ajax({
+      type: "post",
+      url: '<?php echo base_url("listproductscontroller/productRating");?>',
+      data: {ratepost:rateid,storeprodsubidpost:storeprodsubid},
+      success: function(data){
+        swal("You Rate "+rateid+" Star!", "Thank you for rating! :)");
+      },
+      error: function(data){
+        swal("error","Please Log-in your Account","error");
+      }
+    });
+  }
+
+  function cancelCheckout(){
+    $("#text_address").css('text-decoration','none');
+    $("#edit_button").show();
+    $("#new_address").hide();
+    $("#done_button").hide();
+    $("#cancel_button").hide();
+  }
 </script>

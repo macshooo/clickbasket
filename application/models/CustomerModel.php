@@ -5,8 +5,11 @@
 		}
 
 		public function userinfo($id){
-			$this->db->where('consumer_id',$id);
-			$query = $this->db->get('consumers');
+			$query = $this->db->select('*')
+							 					->from('consumers')
+												->join('consumers_address', 'consumers_address.consumer_id = consumers.consumer_id')
+												->where('consumers.consumer_id',$id)
+												->get();
 
 			if($query->num_rows() > 0){
 				return $query->row();
@@ -28,16 +31,20 @@
 			}
 		}
 
-
 		public function getConsumerByEmail($email){
-    $this->db->where('email', $email);
-    $query = $this->db->get('consumers');
-    return $query->row();
-  }
+	    $this->db->where('email', $email);
+	    $query = $this->db->get('consumers');
+	    return $query->row();
+  	}
 
 		//Register Module for class CustomerModel
 		public function register_user($data){
-				$this->db->insert('consumers', $data);
+			$this->db->insert('consumers', $data);
+			return $this->db->insert_id();
+		}
+
+		public function registerAddress($data){
+			$this->db->insert('consumers_address', $data);
 		}
 
 		//update module for class CustomerModel
@@ -48,6 +55,12 @@
 			}else{
 				echo "Fail!";
 			}
+		}
+
+		public function update_user_address($useraddress){
+			$this->db->join('consumers','consumers.consumer_id=consumers_address.consumer_id');
+			$this->db->where('consumers_address.consumer_id', $this->session->userdata('id'));
+			$this->db->update('consumers_address',$useraddress);
 		}
 
 		public function check_email($email){

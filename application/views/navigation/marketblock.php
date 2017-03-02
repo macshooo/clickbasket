@@ -1,4 +1,5 @@
-<?php foreach ($marketlist as $market){ ?>
+<?php if (isset($marketlist)){
+  foreach ($marketlist as $market){ ?>
   <div class="col-md-4">
     <div class="banner banner-o-hid" style="background-image:url(<?= $this->config->item('panel_url').'assets/images/store_image/'.$market->store_image?>.)">
       <!-- <div class="banner banner-o-hid" style="background-image:url(<?php echo base_url('assets/img/711_banner.png');?>)"> -->
@@ -11,4 +12,5 @@
       </div>
     </div>
   </div>
-<?php }?>
+<?php }
+  }?>

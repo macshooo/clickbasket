@@ -6016,6 +6016,16 @@ undefinedundefined.owl-height {
   opacity : 1;
 }
 
+.badge-notify{
+   background:red;
+   position: absolute;
+   left: 7px;
+   top: 3px;
+   transform: (-100%, -100%);
+   margin-top: 1px;
+   margin-left:15px;
+}
+
 #anchor-element {
   display: none;
   font-size: 10px;

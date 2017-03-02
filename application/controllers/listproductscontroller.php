@@ -48,11 +48,15 @@
       checkMarketSession();
       if($prodinfo = $this->ProductModel->getStoreprodByID($prodid)){
         $prodratinginfo = $this->ProductModel->getProductRating($prodid);
-        $prodDiscount = $this->ProductModel->getDiscounts($prodid);
+        $countRating = $this->ProductModel->countRatings($prodid);
+
+        if($discounts = $this->ProductModel->getDiscounts($prodid)){
+          $data['discounts'] = $discounts;
+        }
 
         $data['product_info'] = $prodinfo;
         $data['productrating_info'] = $prodratinginfo;
-        $data['productDiscount'] = $prodDiscount;
+        $data['productrating_count'] = $countRating;
 
         $this->load->view('clickbasket',$data);
         $this->load->view('navigation/mainfooter');
@@ -150,19 +154,29 @@
       $globalcart = $this->session->userdata('globalcart');
 
       if($globalcart!=NULL){
-        $total = 0;
-        foreach($globalcart as $cart){
-          $temp = $cart['price'] * $cart['qty'];
-          $total = $total + $temp;
-        }
         $data = array(
-          'order_total' => $total,
-          'consumer_id' => $this->session->userdata('id')
+          'order_subtotal' => $this->input->post('subtotal'),
+          'order_vat' => $this->input->post('vat'),
+          'grandtotal' => $this->input->post('gtotal'),
+          'consumer_id' => $this->session->userdata('id'),
+          'coupons_id' => $this->input->post('etaDelivery'),
+          'eta'=> date('Y-m-d H:i', strtotime($this->input->post('etaDelivery')))
         );
         $this->ProductModel->placeOrder($data);
         $this->ProductModel->placeProductOrder($globalcart);
+        $this->ProductModel->useCoupon($this->input->post('couponid'));
       }
       $this->session->unset_userdata('globalcart');
+    }
+
+    public function cancelOrder(){
+      $id = $this->input->post('id');
+      $reason = $this->input->post('inputValue');
+      $data = array(
+        'order_status' => 'cancelled',
+        'decline_reason' => $reason
+      );
+      $this->ProductModel->cancelOrder($id, $data);
     }
 
     public function productRating(){
@@ -177,6 +191,26 @@
       );
 
     $this->ProductModel->productRating($data,$storeprodsubid);
+    }
+
+    public function checkCoupon(){
+      $gTotal = $this->input->post('grandTotal');
+      $markettotal = 0;
+
+      if($couponInfo = $this->ProductModel->checkCoupon($this->input->post('coupon'))){
+        if($this->ProductModel->checkUserCoupon($couponInfo->coupons_id) == 'couponexist'){
+          echo 'exist';
+        }else{
+          echo 'insert';
+          $data = array(
+            'coupons_id'=> $couponInfo->coupons_id,
+            'consumer_id'=> $this->session->userdata('id')
+          );
+          $this->ProductModel->activateCoupon($data);
+        }
+      }else{
+        echo 'false';
+      }
     }
 
     public function orderReceipt(){
