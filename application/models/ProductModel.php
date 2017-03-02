@@ -167,6 +167,7 @@
 													->from('coupons')
 													->join('store', 'store.store_id = coupons.store_id', 'left')
 													->where('coupons.coupons_code', $coupon)
+													->order_by('coupons.coupons_id', 'DESC')
 													->get();
 
 				if ($query->num_rows() > 0){
@@ -208,9 +209,7 @@
 			$this->db->insert('store_coupons_discounts', $data);
 		}
 
-		public function useCoupon($couponid){
-			$coupon = array('coupons_use' => 'true');
-			
+		public function useCoupon($coupon, $couponid){
 			$this->db->where('coupons_id', $couponid)
 							 ->where('consumer_id', $this->session->userdata('id'))
 							 ->update('store_coupons_discounts', $coupon);

@@ -285,7 +285,7 @@
 
 			if(qty == 0){
         swal({
-          title: "No item selected!",
+          title: "No quantity for "+pName+" selected!",
           timer: 1000,
           showConfirmButton: false
         });
@@ -343,6 +343,12 @@
 
       var dataString = {couponid: couponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
 
+      if(couponid == null || couponid == undefined){
+        var dataString = {etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
+      }else{
+        var dataString = {couponid: couponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
+      }
+
       swal({
         title: "Confirm!",
         text: "Are you sure of your order?",
@@ -358,7 +364,7 @@
           url: "<?php echo base_url('listproductscontroller/placeOrder');?>",
           data: dataString,
           cache: false,
-          success: function(){
+          success: function(data){
             swal('Success!', 'The order has successfully been processed!', 'success');
 
             window.location.href = "<?php echo base_url('secondarycontroller/orderhistory');?>";

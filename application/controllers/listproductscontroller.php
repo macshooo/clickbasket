@@ -154,17 +154,31 @@
       $globalcart = $this->session->userdata('globalcart');
 
       if($globalcart!=NULL){
-        $data = array(
-          'order_subtotal' => $this->input->post('subtotal'),
-          'order_vat' => $this->input->post('vat'),
-          'grandtotal' => $this->input->post('gtotal'),
-          'consumer_id' => $this->session->userdata('id'),
-          'coupons_id' => $this->input->post('etaDelivery'),
-          'eta'=> date('Y-m-d H:i', strtotime($this->input->post('etaDelivery')))
-        );
-        $this->ProductModel->placeOrder($data);
-        $this->ProductModel->placeProductOrder($globalcart);
-        $this->ProductModel->useCoupon($this->input->post('couponid'));
+        if($this->input->post('couponid')){
+          $data = array(
+            'order_subtotal' => $this->input->post('subtotal'),
+            'order_vat' => $this->input->post('vat'),
+            'grandtotal' => $this->input->post('gtotal'),
+            'consumer_id' => $this->session->userdata('id'),
+            'coupons_id' => $this->input->post('couponid'),
+            'eta'=> date('Y-m-d H:i', strtotime($this->input->post('etaDelivery')))
+          );
+          $this->ProductModel->placeOrder($data);
+          $this->ProductModel->placeProductOrder($globalcart);
+
+          $coupon = array('coupons_use' => 'true');
+          $this->ProductModel->useCoupon($coupon, $this->input->post('couponid'));
+        }else{
+          $data = array(
+            'order_subtotal' => $this->input->post('subtotal'),
+            'order_vat' => $this->input->post('vat'),
+            'grandtotal' => $this->input->post('gtotal'),
+            'consumer_id' => $this->session->userdata('id'),
+            'eta'=> date('Y-m-d H:i', strtotime($this->input->post('etaDelivery')))
+          );
+          $this->ProductModel->placeOrder($data);
+          $this->ProductModel->placeProductOrder($globalcart);
+        }
       }
       $this->session->unset_userdata('globalcart');
     }

@@ -48,32 +48,32 @@
                 $newprice = $product_info->storeprod_price - $discountrate;
                 echo '<span class="label label-danger">'.floor($discounts->discount).'% off!</span><br>';
                 echo '<del>&#8369;'.$product_info->storeprod_price.'</del>';
-                echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.round($newprice, 2).'</p>';
+                echo '<p class="product-page-price" id="price_'.$product_info->prod_id.'">&#8369;'.round($newprice, 2).'</p>';
               }else{
                 $newprice = $product_info->storeprod_price - $discounts->discount;
                 echo '<span class="label label-danger">&#8369;'.$discounts->discount.' off!</span><br>';
                 echo '<del>&#8369;'.$product_info->storeprod_price.'</del>';
-                echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.round($newprice, 2).'</p>';
+                echo '<p class="product-page-price" id="price_'.$product_info->prod_id.'">&#8369;'.round($newprice, 2).'</p>';
               }
             }else{
-              echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
+              echo '<p class="product-page-price" id="price_'.$product_info->prod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
             }
           }else{
-            echo '<p class="product-page-price" id="price_'.$product_info->storeprod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
+            echo '<p class="product-page-price" id="price_'.$product_info->prod_id.'">&#8369;'.$product_info->storeprod_price.'</p>';
           }?>
           <!-- <p class="text-muted text-sm">Free Shipping</p> -->
           <p class="product-page-desc-lg"><?= $product_info->prod_desc;?></p>
           <ul class="product-page-actions-list">
             <li class="product-page-qty-item">
               <button class="product-page-qty product-page-qty-minus">-</button>
-              <input class="product-page-qty product-page-qty-input qty" id="qty_<?php echo $product_info->storeprod_id;?>" type="text" value="1" />
+              <input class="product-page-qty product-page-qty-input qty" id="qty_<?php echo $product_info->prod_id;?>" type="text" value="1" />
               <button class="product-page-qty product-page-qty-plus">+</button>
               <!--Identifying the current stock-->
               <input type="hidden" id="max_<?= $product_info->storeprod_id;?>" value="<?= $product_info->BALANCE; ?>">
             </li>
             <li>
               <?php if ($product_info->BALANCE > '1'){ ?>
-                <button class="btn btn-lg btn-primary" value="<?= $product_info->storeprod_id;?>" name="<?= $product_info->prod_name;?>" id = "addtocart"><i class="fa fa-shopping-cart"></i>Add to Cart</button><?php
+                <button class="btn btn-lg btn-primary" value="<?= $product_info->prod_id;?>" name="<?= $product_info->prod_name;?>" id = "addtocart"><i class="fa fa-shopping-cart"></i>Add to Cart</button><?php
               } ?>
             </li>
             <!-- <li><a class="btn btn-lg btn-default" href="#"><i class="fa fa-star"></i>Wishlist</a></li> -->

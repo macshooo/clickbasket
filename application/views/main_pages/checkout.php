@@ -124,6 +124,7 @@
                   $discountrate = $total2 * $discount;
                   $total2 = $total2 - $discountrate;
                   echo '<span class="label label-danger" id="couponlabel" value="'.$crow->store_id.'">Coupon Used: '.$crow->coupons_discount.'% off!</span>';
+                  echo '<input type="hidden" id="couponid" value="'.$crow->coupons_id.'">';
                 }else{
                   if($crow->coupons_discount < $total2){
                     $total2 = $total2 - $crow->coupons_discount;
@@ -138,6 +139,7 @@
                   $discountrate = $total3 * $discount;
                   $total3 = $total3 - $discountrate;
                   echo '<span class="label label-danger" id="couponlabel" value="'.$crow->store_id.'">Coupon Used: '.$crow->coupons_discount.'% off!</span>';
+                  echo '<input type="hidden" id="couponid" value="'.$crow->coupons_id.'">';
                 }else{
                   if($crow->coupons_discount < $total3){
                     $total3 = $total3 - $crow->coupons_discount;
