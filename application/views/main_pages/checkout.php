@@ -149,6 +149,9 @@
                 }
               }
             endforeach;
+            $couponuse = 'true';
+          }else{
+            $couponuse = 'false';
           }
         ?>
         <div class="cc-form">
@@ -216,7 +219,7 @@
             echo '<span style="margin-top:-10px; color:red;"><i>Minimum of PHP 200!</i></span>';
           }?>
           <br>
-          <a onclick="couponCode();">Have a coupon code?</a>
+          <a onclick="couponCode(<?= $couponuse;?>);">Have a coupon code?</a>
         </div>
       </div>
     </div>

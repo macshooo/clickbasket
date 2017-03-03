@@ -135,14 +135,14 @@
 							 ->join('store_products_subcategory', 'store_products.storeprod_id = store_products_subcategory.storeprod_id')
 							 ->join('store', 'store_products_subcategory.store_id = store.store_id')
 							 ->where('store_products_subcategory.store_id', $this->session->userdata('market'))
-      				 ->where('store_products.prod_id',$data['id']);
+      				 ->where('store_products.storeprod_id',$data['id']);
       $query = $this->db->get();
       $prod = $query->row();
 
 			$market = $prod->store_name;
 			$marketid = $prod->store_id;
 			$image = $prod->storeprod_image;
-			$id = $prod->prod_id;
+			$id = $prod->storeprod_id;
 			$name = $prod->prod_name;
 			$price = $data['price'];
 			$qty = $data['qty'];

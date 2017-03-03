@@ -341,8 +341,6 @@
       var vat = $("#vatamount").html().substring(1,$("#vatamount").html().length);
       var gtotal = $("#gTotal").html().substring(1,$("#gTotal").html().length);
 
-      var dataString = {couponid: couponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
-
       if(couponid == null || couponid == undefined){
         var dataString = {etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
       }else{
@@ -364,12 +362,11 @@
           url: "<?php echo base_url('listproductscontroller/placeOrder');?>",
           data: dataString,
           cache: false,
-          success: function(data){
+          success: function(){
             swal('Success!', 'The order has successfully been processed!', 'success');
-
+          }, function(){
             window.location.href = "<?php echo base_url('secondarycontroller/orderhistory');?>";
-            window.location.href.preventDefault();
-          }, error: function(){
+          },error: function(){
             swal('Oops!', 'Something went wrong. Please try again later', 'error');
           }
         })
@@ -516,7 +513,7 @@
     });
   }
 
-  function couponCode(){
+  function couponCode(couponuse){
     var grandTotal = $('#gTotal').html();
     swal({
       title: "",
@@ -535,33 +532,40 @@
       return false
       }
 
-      $.ajax({
-        type: "post",
-        url: '<?php echo base_url("listproductscontroller/checkCoupon");?>',
-        data: {coupon: inputValue, grandTotal: grandTotal},
-        success: function(data){
-          if(data == 'false'){
-            swal.showInputError("That seems to be an invalid coupon");
-          }else if(data == 'exist'){
-            swal.showInputError("Coupon has already been activated");
-          }else{
-            swal({
-              title: "Activated!",
-              text: 'Coupon code activated',
-              type: "success",
-              closeOnConfirm: true,
-              animation: "slide-from-top",
-              inputPlaceholder: "Coupon Code"
-            },
-            function(){
-              location.reload();
-            });
+      if (couponuse == true){
+        swal.showInputError("You already have a coupon in use!");
+        return false;
+      }else{
+        $.ajax({
+          type: "post",
+          url: '<?php echo base_url("listproductscontroller/checkCoupon");?>',
+          data: {coupon: inputValue, grandTotal: grandTotal},
+          success: function(data){
+            if(data == 'false'){
+              swal.showInputError("That seems to be an invalid coupon");
+              return false;
+            }else if(data == 'exist'){
+              swal.showInputError("Coupon has already been activated");
+              return false;
+            }else{
+              swal({
+                title: "Activated!",
+                text: 'Coupon code activated',
+                type: "success",
+                closeOnConfirm: true,
+                animation: "slide-from-top",
+                inputPlaceholder: "Coupon Code"
+              },
+              function(){
+                location.reload();
+              });
+            }
+          },
+          error: function(){
+            swal("Oops","Something went wrong! Please try again later.","error");
           }
-        },
-        error: function(){
-          swal("Oops","Something went wrong! Please try again later.","error");
-        }
-      });
+        });
+      }
     });
   }
 
