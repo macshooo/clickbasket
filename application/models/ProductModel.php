@@ -165,9 +165,10 @@
 		public function checkCoupon($coupon){
 				$query = $this->db->select('*')
 													->from('coupons')
-													->join('store', 'store.store_id = coupons.store_id', 'left')
+													->join('store_coupons', 'store_coupons.coupons_id = coupons.coupons_id')
+													->join('store', 'store.store_id = store_coupons.store_id', 'left')
 													->where('coupons.coupons_code', $coupon)
-													->order_by('coupons.coupons_id', 'DESC')
+													->order_by('storecoupon_id', 'DESC')
 													->get();
 
 				if ($query->num_rows() > 0){
@@ -180,24 +181,36 @@
 		public function checkUserCoupon($id){
 			$query = $this->db->select('*')
 												->from('store_coupons_discounts')
-												->where('coupons_id', $id)
+												->where('storecoupon_id', $id)
 												->where('consumer_id', $this->session->userdata('id'))
 												->get();
 
 			if ($query->num_rows() > 0){
 				return 'couponexist';
 			}else{
-				return 'success';
+				return $query->row();
 			}
+		}
+
+		public function getCouponCount($id){
+			$query = $this->db->select('COUNT(storecoupon_id) AS uses')
+												->from('store_coupons_discounts')
+												->where('storecoupon_id', $id)
+												->group_by('storecoupon_id')
+												->get();
+
+			return $query->num_rows();
 		}
 
 		public function getCoupon(){
 			$query = $this->db->select('*')
 												->from('coupons')
-												->join('store_coupons_discounts', 'store_coupons_discounts.coupons_id = coupons.coupons_id')
+												->join('store_coupons', 'store_coupons.coupons_id = coupons.coupons_id')
+												->join('store_coupons_discounts', 'store_coupons_discounts.storecoupon_id = store_coupons.storecoupon_id')
 												->where('consumer_id', $this->session->userdata('id'))
 												->where('coupons_use', 'false')
 												->get();
+
 			if ($query->num_rows() > 0){
 				return $query->result();
 			}else{
@@ -209,8 +222,8 @@
 			$this->db->insert('store_coupons_discounts', $data);
 		}
 
-		public function useCoupon($coupon, $couponid){
-			$this->db->where('coupons_id', $couponid)
+		public function useCoupon($coupon, $storecouponid){
+			$this->db->where('storecoupon_id', $storecouponid)
 							 ->where('consumer_id', $this->session->userdata('id'))
 							 ->update('store_coupons_discounts', $coupon);
 		}

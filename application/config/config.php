@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/ClickBasket/';
-$config['panel_url'] = 'http://192.168.0.185/ClickBasketPanel/';
+$config['base_url'] = 'http://192.168.43.47/ClickBasket/';
+$config['panel_url'] = 'http://192.168.43.138/ClickBasketPanel/';
 
 /*
 |--------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
   class ListProductsController extends CI_Controller {
-    private $limit = 5;
+    private $limit = 3;
     public function __construct(){
       parent::__construct();
       $this->load->helper('app');
@@ -154,20 +154,20 @@
       $globalcart = $this->session->userdata('globalcart');
 
       if($globalcart!=NULL){
-        if($this->input->post('couponid')){
+        if($this->input->post('storecouponid')){
           $data = array(
             'order_subtotal' => $this->input->post('subtotal'),
             'order_vat' => $this->input->post('vat'),
             'grandtotal' => $this->input->post('gtotal'),
             'consumer_id' => $this->session->userdata('id'),
-            'coupons_id' => $this->input->post('couponid'),
+            'storecoupon_id' => $this->input->post('storecouponid'),
             'eta'=> date('Y-m-d H:i', strtotime($this->input->post('etaDelivery')))
           );
           $this->ProductModel->placeOrder($data);
           $this->ProductModel->placeProductOrder($globalcart);
 
           $coupon = array('coupons_use' => 'true');
-          $this->ProductModel->useCoupon($coupon, $this->input->post('couponid'));
+          $this->ProductModel->useCoupon($coupon, $this->input->post('storecouponid'));
         }else{
           $data = array(
             'order_subtotal' => $this->input->post('subtotal'),
@@ -212,15 +212,19 @@
       $markettotal = 0;
 
       if($couponInfo = $this->ProductModel->checkCoupon($this->input->post('coupon'))){
-        if($this->ProductModel->checkUserCoupon($couponInfo->coupons_id) == 'couponexist'){
+        if($this->ProductModel->checkUserCoupon($couponInfo->storecoupon_id) == 'couponexist'){
           echo 'exist';
         }else{
-          echo 'insert';
-          $data = array(
-            'coupons_id'=> $couponInfo->coupons_id,
-            'consumer_id'=> $this->session->userdata('id')
-          );
-          $this->ProductModel->activateCoupon($data);
+          $couponcount = $this->ProductModel->getCouponCount($couponInfo->storecoupon_id);
+          if ($couponcount >= $couponInfo->coupons_max){
+            echo 'limit';
+          }else{
+            $data = array(
+              'storecoupon_id'=> $couponInfo->storecoupon_id,
+              'consumer_id'=> $this->session->userdata('id')
+            );
+            $this->ProductModel->activateCoupon($data);
+          }
         }
       }else{
         echo 'false';

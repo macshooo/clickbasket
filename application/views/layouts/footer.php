@@ -335,16 +335,16 @@
 		})
 
     $('#placeorder').click(function(){
-      var couponid = $("#couponid").val();
+      var storecouponid = $("#storecouponid").val();
       var etaDelivery = $("#datetimepicker1").find("input").val();
       var subtotal = $("#subtotal").html().substring(1,$("#subtotal").html().length);
       var vat = $("#vatamount").html().substring(1,$("#vatamount").html().length);
       var gtotal = $("#gTotal").html().substring(1,$("#gTotal").html().length);
 
-      if(couponid == null || couponid == undefined){
+      if(storecouponid == null || storecouponid == undefined){
         var dataString = {etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
       }else{
-        var dataString = {couponid: couponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
+        var dataString = {storecouponid: storecouponid, etaDelivery: etaDelivery, subtotal: subtotal, vat: vat, gtotal: gtotal};
       }
 
       swal({
@@ -364,7 +364,6 @@
           cache: false,
           success: function(){
             swal('Success!', 'The order has successfully been processed!', 'success');
-          }, function(){
             window.location.href = "<?php echo base_url('secondarycontroller/orderhistory');?>";
           },error: function(){
             swal('Oops!', 'Something went wrong. Please try again later', 'error');
@@ -547,6 +546,8 @@
             }else if(data == 'exist'){
               swal.showInputError("Coupon has already been activated");
               return false;
+            }else if(data == 'limit'){
+              swal.showInputError("Coupon has already reached its limit!");
             }else{
               swal({
                 title: "Activated!",

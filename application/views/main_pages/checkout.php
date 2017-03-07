@@ -109,7 +109,7 @@
                   $discountrate = $total1 * $discount;
                   $total1 = $total1 - $discountrate;
                   echo '<span class="label label-danger" id="couponlabel">Coupon Used: '.$crow->coupons_discount.'% off!</span>';
-                  echo '<input type="hidden" id="couponid" value="'.$crow->coupons_id.'">';
+                  echo '<input type="hidden" id="storecouponid" value="'.$crow->storecoupon_id.'">';
                 }else{
                   if($crow->coupons_discount < $total1){
                     $total1 = $total1 - $crow->coupons_discount;
@@ -212,11 +212,11 @@
               <h3 id="gTotal">&#8369;<?= $total;?></h3>
             </div>
             <div class="form-group form-group-cc-cvc">
-              <button class="btn btn-primary" id="placeorder" <?php if ($total < 200){echo 'disabled';}else{}?>>Place Order</button>
+              <button class="btn btn-primary" id="placeorder" <?php if ($total < 500){echo 'disabled';}else{}?>>Place Order</button>
             </div>
           </div>
           <?php if($total < 200){
-            echo '<span style="margin-top:-10px; color:red;"><i>Minimum of PHP 200!</i></span>';
+            echo '<span style="margin-top:-10px; color:red;"><i>Minimum of PHP 500!</i></span>';
           }?>
           <br>
           <a onclick="couponCode(<?= $couponuse;?>);">Have a coupon code?</a>
